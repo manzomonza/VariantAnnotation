@@ -175,7 +175,7 @@ cancerHotspot_info = function(snv_table,cancerHotspots){
   return(adjusted_snv)
 }
 
-#' Title
+#' Write out cancer Hotspot info table
 #'
 #' @param CH_snv
 #' @param CH_info_file

@@ -2,6 +2,9 @@
 
 CLINVAR = data.table::fread('/Users/manzo/USB/USB_Diagnostics/VariantAnnotationModules/testing/dbs/snippet_clinvar.txt')
 CLINVAR = dplyr::filter(CLINVAR, Assembly == "GRCh37")
+
+COSMIC = data.table::fread('/Users/manzo/USB/USB_Diagnostics/VariantAnnotationModules/testing/dbs/head_cosmic.tsv')
+table(COSMIC$`Gene name`)
 testfiles = list.files(path = "./testing", recursive = TRUE, full.names = TRUE)
 ## SNVS
 
