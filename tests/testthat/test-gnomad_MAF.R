@@ -10,5 +10,5 @@ tsnv$alt[1:3] = c('C','C','C')
 tsnv = attach_gnomad_MAF(tsnv)
 tsnv$gnomad_MAF
 testthat::test_that("gnomad AF extraction works", {
-testthat::expect_equal(gnomad_MAF(chr = '19', position = '66044', ref = 'T', alt = 'C', gnomad = GNOMAD), 0.024590200)
+testthat::expect_equal(gnomad_MAF(chr = '19', position = '66044', ref = 'T', alt = 'C', gnomad = GNOMAD), 0.0245902)
 })

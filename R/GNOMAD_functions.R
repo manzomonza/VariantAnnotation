@@ -1,9 +1,5 @@
 ## gnomad functions
 
-
-
-
-
 #' Extract Minor Allel Frequency from gnomad table
 #'
 #' @param chr
