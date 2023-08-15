@@ -30,6 +30,26 @@ clinvarCheck <- function(){
 }
 
 
+
+
+
+ClinVar_function_call = function(snv_table, clinvar){
+  asnv = amino_acid_code_1_to_3(snv_table)
+  asnv$protein = unname(sapply(asnv$protein, fsClinvarfix))
+  asnv$ClinVar_Significance = NA
+  asnv$ClinVar_VariationID = NA
+  for(i in 1:nrow(asnv)){
+    clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr =asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
+    if(typeof(clinhit) == 'list'){
+      asnv$ClinVar_Significance[i] = clinhit$ClinicalSignificance
+      asnv$ClinVar_VariationID[i] = clinhit$VariationID
+    }else{
+      next
+    }
+  }
+  return(asnv)
+}
+
 #' Frameshift clinvar fix
 #'
 #' @param amino_acid_change
@@ -73,9 +93,7 @@ fsClinvarfix <- function(amino_acid_change){
 #' @export
 #'
 #' @examples
-clinvar_filtering = function(genestr,
-                             codingstr,
-                             proteinstr, clinvar){
+clinvar_filtering = function(genestr,codingstr, proteinstr, clinvar){
   clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
   clinvar_hit = clinvar_check_protein(proteinstr = proteinstr, clinvar_fil = clinvar_hit)
   clinvar_hit = clinvar_check_coding(codingstr = codingstr, clinvar_fil = clinvar_hit)
@@ -88,7 +106,9 @@ clinvar_filtering = function(genestr,
   if(nrow(clinvar_hit) ==1){
     return(clinvar_hit)
   }
-  else{
+  else if(nrow(clinvar_hit) ==0){
+    return(NA)
+  }else if(nrow(clinvar_hit) >1){
     return('multiple entries')
   }
 }
@@ -126,7 +146,4 @@ clinvar_variantID = function(clinvar_hit){
   }
   return(varid)
 }
-
-
-
 

@@ -82,25 +82,6 @@ cancerHotspot_add_columns_to_snv = function(snv_table){
 }
 
 
-#' Adjust - if needed -- protein column to be single amino acid letter encoding
-#'
-#' @param snv_table
-#'
-#' @return
-#' @export
-#'
-#' @examples
-cancerHotspot_adjust_protein_column = function(snv_table){
-  for(i in 1:nrow(snv_table)){
-    if(is.character(snv_table$protein[i]) & !is.na(snv_table$protein[i]) & !grepl("_", snv_table$protein[i]) & snv_table$protein[i] != 'p.'){
-      snv_table$protein[i] = amino_acid_conversion_three_to_one(snv_table$protein[i])
-    }
-  }
-  return(snv_table)
-}
-
-
-
 #' Extract reference amino acid from 'appropriate' variant entries
 #'
 #' @param aa_change
@@ -169,8 +150,7 @@ cancerHotspot_add_mutation_values = function(snv_table, cancerHotspots){
 #'
 #' @examples
 cancerHotspot_info = function(snv_table, cancerHotspots){
-  #adjusted_snv = cancerHotspot_adjust_protein_column(snv_table)
-  adjusted_snv = adjust_protein(snv_table)
+  adjusted_snv = amino_acid_code_3_to_1(snv_table)
   adjusted_snv = cancerHotspot_add_columns_to_snv(adjusted_snv)
   adjusted_snv = cancerHotspot_add_mutation_values(adjusted_snv, cancerHotspots = cancerHotspots)
   return(adjusted_snv)

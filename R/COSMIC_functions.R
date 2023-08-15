@@ -8,7 +8,7 @@
 #'
 #' @examples
 COSMIC_function_call = function(snv_table, sql_con_tbl){
-  asnv = adjust_protein(snv_table)
+  asnv = amino_acid_code_3_to_1(snv_table)
   asnv$COSMIC_n_total = NA
   asnv$COSMIC_n_tissue = NA
   for(i in 1:nrow(asnv)){
@@ -29,6 +29,7 @@ COSMIC_function_call = function(snv_table, sql_con_tbl){
   }
   return(asnv)
 }
+
 
 
 #' Write out cancer Hotspot info table
