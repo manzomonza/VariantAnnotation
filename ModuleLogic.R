@@ -8,6 +8,7 @@ table(COSMIC$`Gene name`)
 testfiles = list.files(path = "./testing", recursive = TRUE, full.names = TRUE)
 ## SNVS
 
+
 snvfiles = grep("snv.txt", testfiles, value = TRUE)
 snvs = lapply(snvfiles, readr::read_tsv)
 
