@@ -32,14 +32,14 @@ gnomad_MAF = function(chr, ref, alt, position, gnomad){
 #' @export
 #'
 #' @examples
-attach_gnomad_MAF = function(snv_table){
+attach_gnomad_MAF = function(snv_table, gnomad){
   snv_table$gnomad_MAF = NA
   for(i in 1:nrow(snv_table)){
   maf_v = gnomad_MAF(chr = stringr::str_remove(snv_table$seqnames[i], pattern = "chr"),
                      ref = snv_table$ref[i],
                      alt = snv_table$alt[i],
                      position = snv_table$origPos[i],
-                     gnomad = GNOMAD)
+                     gnomad = gnomad)
   snv_table$gnomad_MAF[i] = maf_v
   }
   return(snv_table)
