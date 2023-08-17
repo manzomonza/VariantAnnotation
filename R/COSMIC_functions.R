@@ -13,11 +13,13 @@ COSMIC_function_call = function(snv_table, sql_con_tbl){
   asnv$COSMIC_n_tissue = NA
   for(i in 1:nrow(asnv)){
     gene = asnv$gene[i]
+    protein = snv$protein[i]
+    coding = asnv$coding[i]
     variants_per_tissue = dplyr::filter(sql_con_tbl, gene_name == gene)
     if(is.na(asnv$protein[i]) | asnv$protein[i] == "p.?"){
-      variants_per_tissue = dplyr::filter(variants_per_tissue, mutation_cds == asnv$coding[i])
+      variants_per_tissue = dplyr::filter(variants_per_tissue, mutation_cds == coding)
     }else{
-      variants_per_tissue = dplyr::filter(variants_per_tissue, mutation_aa == asnv$protein[i])
+      variants_per_tissue = dplyr::filter(variants_per_tissue, mutation_aa == protein)
     }
 
     variants_per_tissue = dplyr::collect(variants_per_tissue)
