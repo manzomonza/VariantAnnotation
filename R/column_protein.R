@@ -8,7 +8,7 @@
 #'
 #' @examples
 amino_acid_code_3_to_1 = function(snv){
-  snv$protein = unname(sapply(snv$protein, amino_acid_conversion_three_to_one))
+  snv$protein = unname(sapply(snv$protein, VariantAnnotationModules::amino_acid_conversion_three_to_one))
   return(snv)
 }
 
@@ -21,6 +21,6 @@ amino_acid_code_3_to_1 = function(snv){
 #'
 #' @examples
 amino_acid_code_1_to_3 = function(snv){
-  snv$protein = unname(sapply(snv$protein, amino_acid_conversion_one_to_three))
+  snv$protein = unname(sapply(snv$protein, VariantAnnotationModules::amino_acid_conversion_one_to_three))
   return(snv)
 }

@@ -14,7 +14,7 @@ write_Annotation_Modules = function(snvt, annotation_fp){
   readr::write_tsv(selected_snv, file = annotation_fp$cancerHotspot)
 
   ## Cosmic
-  cosmic_s = COSMIC_function_call(snv_table = snvt,sql_con_tbl = COSMIC)
+  cosmic_s = COSMIC_function_call(snv_table = snvt, sql_con_tbl = COSMIC)
   selected_snv = dplyr::select(cosmic_s, rowid, gene, coding, protein, contains("COSMIC")  )
   readr::write_tsv(selected_snv, file = annotation_fp$COSMIC)
 
