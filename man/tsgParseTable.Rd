@@ -4,7 +4,7 @@
 \alias{tsgParseTable}
 \title{tsgParseTable Checks SNV contains 'fs' or 'Ter'}
 \usage{
-tsgParseTable(snvtable)
+tsgParseTable(snvtable, TSG_list)
 }
 \arguments{
 \item{snvtable}{}

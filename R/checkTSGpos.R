@@ -1,3 +1,7 @@
+
+
+TSG_LENGTHS = readRDS("/Users/manzo/USB/USB_Diagnostics/VariantAnnotationModules/testing/dbs/OncoKB_TSG_maxLength.RDS")
+
 #' Check if Gene is TSG and if variant leads to Ter or frameshift within 90% of AA length
 #'
 #' @param gene
@@ -30,20 +34,22 @@ checkTSG <- function(gene, aa_pos, TSG_list){
 #' @export
 #'
 #' @examples
-tsgParseTable <- function(snvtable){
+tsgParseTable <- function(snvtable, TSG_list){
   if(nrow(snvtable) >0){
-    snvtable$tsgInfo = NA
-    snvtable$aa_position = NA
-    snvtable$aa_position = unname(sapply(snvtable$one_AA, function(x) extract_snv_position(x)))
-    for (i in 1:nrow(snvtable)){
-      if(grepl("\\*|fs", snvtable$one_AA[i])){
-        snvtable$tsgInfo[i] = checkTSG(gene = snvtable$gene[i],
-                                       aa_pos = snvtable$aa_position[i],
-                                       TSG_list = TSG_LENGTHS)
+    asnv = VariantAnnotationModules::amino_acid_code_3_to_1(snvtable)
+    asnv$tsgInfo = NA
+    asnv$aa_position = NA
+    for (i in 1:nrow(asnv)){
+      if(grepl("\\*|fs", asnv$protein[i])){
+        asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
+        asnv$tsgInfo[i] = checkTSG(gene = asnv$gene[i],
+                                       aa_pos = asnv$aa_position[i],
+                                       TSG_list = TSG_list)
 
       }
     }
     #snvtable <- subset(snvtable, selec=-aa_position)
-    return(snvtable)
+
+    return(asnv)
   }
 }
