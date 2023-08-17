@@ -4,7 +4,7 @@
 \alias{attach_gnomad_MAF}
 \title{Assign identified MAF to tsnv table}
 \usage{
-attach_gnomad_MAF(snv_table)
+attach_gnomad_MAF(snv_table, gnomad)
 }
 \arguments{
 \item{snv_table}{}

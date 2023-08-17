@@ -1,5 +1,13 @@
 ## Filepaths
 
+#' Generate list of filepaths from annotation folder
+#'
+#' @param output_path
+#'
+#' @return
+#' @export
+#'
+#' @examples
 annotation_filepaths = function(output_path){
   annotation_dir = paste0(output_path, "/annotation_output")
   if(!dir.exists(annotation_dir)){
