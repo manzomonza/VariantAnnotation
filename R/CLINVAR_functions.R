@@ -123,7 +123,7 @@ clinvar_filtering = function(genestr,codingstr, proteinstr, clinvar){
 #' @examples
 clinvar_significance = function(clinvar_hit){
   if(typeof(clinvar_hit) !='character'){
-    significance = clinvar_hit$ClinicalSignificance
+    significance = clinvar_hit$clinical_significance
   }else{
     significance = NA
   }
@@ -157,7 +157,7 @@ clinvar_variantID = function(clinvar_hit){
 #'
 #' @examples
 clinvar_check_gene = function(genestr, clinvar_fil){
-  clinvar_fil = dplyr::filter(clinvar_fil, GeneSymbol == genestr )
+  clinvar_fil = dplyr::filter(clinvar_fil, gene_symbol == genestr )
   return(clinvar_fil)
 }
 
@@ -171,7 +171,7 @@ clinvar_check_gene = function(genestr, clinvar_fil){
 #'
 #' @examples
 clinvar_check_coding = function(codingstr, clinvar_fil){
-  clinvar_fil = dplyr::filter(clinvar_fil, grepl(codingstr, Name, fixed = TRUE ))
+  clinvar_fil = dplyr::filter(clinvar_fil, grepl(codingstr, name, fixed = TRUE ))
   return(clinvar_fil)
 }
 #' Check protein string for presence in clinvar_fil
@@ -184,7 +184,7 @@ clinvar_check_coding = function(codingstr, clinvar_fil){
 #'
 #' @examples
 clinvar_check_protein = function(proteinstr, clinvar_fil){
-  clinvar_fil = dplyr::filter(clinvar_fil, grepl(proteinstr, Name, fixed = TRUE ))
+  clinvar_fil = dplyr::filter(clinvar_fil, grepl(proteinstr, name, fixed = TRUE ))
   return(clinvar_fil)
 }
 
