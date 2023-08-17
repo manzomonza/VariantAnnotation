@@ -42,7 +42,7 @@ ClinVar_function_call = function(snv_table, clinvar){
     clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr =asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
     if(typeof(clinhit) == 'list'){
       asnv$ClinVar_Significance[i] = clinhit$clinical_significance
-      asnv$ClinVar_VariationID[i] = clinhit$VariationID
+      asnv$ClinVar_VariationID[i] = clinhit$variation_id
     }else{
       next
     }
@@ -140,7 +140,7 @@ clinvar_significance = function(clinvar_hit){
 #' @examples
 clinvar_variantID = function(clinvar_hit){
   if(typeof(clinvar_hit) !='character'){
-    varid = clinvar_hit$VariationID
+    varid = clinvar_hit$variation_id
   }else{
     varid = NA
   }
