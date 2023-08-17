@@ -1,7 +1,3 @@
-
-
-TSG_LENGTHS = readRDS("/Users/manzo/USB/USB_Diagnostics/VariantAnnotationModules/testing/dbs/OncoKB_TSG_maxLength.RDS")
-
 #' Check if Gene is TSG and if variant leads to Ter or frameshift within 90% of AA length
 #'
 #' @param gene
