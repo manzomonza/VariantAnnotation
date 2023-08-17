@@ -1,5 +1,3 @@
-## Filepaths
-
 #' Generate list of filepaths from annotation folder
 #'
 #' @param output_path
