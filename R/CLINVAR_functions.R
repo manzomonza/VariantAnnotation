@@ -41,7 +41,7 @@ ClinVar_function_call = function(snv_table, clinvar){
   for(i in 1:nrow(asnv)){
     clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr =asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
     if(typeof(clinhit) == 'list'){
-      asnv$ClinVar_Significance[i] = clinhit$ClinicalSignificance
+      asnv$ClinVar_Significance[i] = clinhit$clinical_significance
       asnv$ClinVar_VariationID[i] = clinhit$VariationID
     }else{
       next
