@@ -30,16 +30,13 @@ clinvarCheck <- function(){
 }
 
 
-
-
-
 ClinVar_function_call = function(snv_table, clinvar){
   asnv = amino_acid_code_1_to_3(snv_table)
   asnv$protein = unname(sapply(asnv$protein, fsClinvarfix))
   asnv$ClinVar_Significance = NA
   asnv$ClinVar_VariationID = NA
   for(i in 1:nrow(asnv)){
-    clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr =asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
+    clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr = asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
     if(typeof(clinhit) == 'list'){
       asnv$ClinVar_Significance[i] = clinhit$clinical_significance
       asnv$ClinVar_VariationID[i] = clinhit$variation_id
