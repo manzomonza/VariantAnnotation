@@ -147,3 +147,50 @@ clinvar_variantID = function(clinvar_hit){
   return(varid)
 }
 
+#' Check gene string for presence in clinvar_fil
+#'
+#' @param genestr
+#' @param clinvar_fil
+#'
+#' @return
+#' @export
+#'
+#' @examples
+clinvar_check_gene = function(genestr, clinvar_fil){
+  clinvar_fil = dplyr::filter(clinvar_fil, GeneSymbol == genestr )
+  return(clinvar_fil)
+}
+
+#' Check coding string for presence in clinvar_fil
+#'
+#' @param genestr
+#' @param clinvar_fil
+#'
+#' @return
+#' @export
+#'
+#' @examples
+clinvar_check_coding = function(codingstr, clinvar_fil){
+  clinvar_fil = dplyr::filter(clinvar_fil, grepl(codingstr, Name, fixed = TRUE ))
+  return(clinvar_fil)
+}
+#' Check protein string for presence in clinvar_fil
+#'
+#' @param genestr
+#' @param clinvar_fil
+#'
+#' @return
+#' @export
+#'
+#' @examples
+clinvar_check_protein = function(proteinstr, clinvar_fil){
+  clinvar_fil = dplyr::filter(clinvar_fil, grepl(proteinstr, Name, fixed = TRUE ))
+  return(clinvar_fil)
+}
+
+
+
+
+
+
+

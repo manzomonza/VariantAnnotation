@@ -15,21 +15,6 @@ snvs = lapply(snvfiles, readr::read_tsv)
 
 table(unlist(lapply(snvs[[4]]$protein, oneORthree_code)))
 
-clinvar_check_gene = function(genestr, clinvar_fil){
-  clinvar_fil = dplyr::filter(clinvar_fil, GeneSymbol == genestr )
-  return(clinvar_fil)
-}
-clinvar_check_coding = function(codingstr, clinvar_fil){
-  clinvar_fil = dplyr::filter(clinvar_fil, grepl(codingstr, Name, fixed = TRUE ))
-  return(clinvar_fil)
-}
-
-clinvar_check_protein = function(proteinstr, clinvar_fil){
-  clinvar_fil = dplyr::filter(clinvar_fil, grepl(proteinstr, Name, fixed = TRUE ))
-  return(clinvar_fil)
-}
-
-
 
 clinvar = clinvar_check_coding(codingstr = codingstr, clinvar_fil = clinvar)
 
