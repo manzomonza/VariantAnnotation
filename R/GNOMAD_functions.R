@@ -14,6 +14,7 @@
 #' @examples
 gnomad_MAF = function(chr, ref, alt, position, gnomad){
   gnomad_hit = dplyr::filter(gnomad, POS == position)
+  gnomad_hit = dplyr::collect(gnomad_hit)
   gnomad_hit = dplyr::filter(gnomad_hit, CHROM == chr)
   gnomad_hit = dplyr::filter(gnomad_hit, REF == ref)
   gnomad_hit = dplyr::filter(gnomad_hit, ALT == alt)
