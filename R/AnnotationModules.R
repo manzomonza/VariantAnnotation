@@ -15,7 +15,7 @@ write_Annotation_Modules = function(snvt, annotation_fp){
 
   ## Cosmic
   cosmic_s = COSMIC_function_call(snv_table = snvt, sql_con_tbl = COSMIC)
-  selected_snv = dplyr::select(cosmic_s, rowid, gene, coding, protein, contains("COSMIC")  )
+  selected_tb = dplyr::select(cosmic_s, rowid, gene, coding, protein, contains("COSMIC")  )
   readr::write_tsv(selected_tb, file = annotation_fp$COSMIC)
 
   ## Gnomad
@@ -32,4 +32,10 @@ write_Annotation_Modules = function(snvt, annotation_fp){
   tsg_s = tsgParseTable(snvt, TSG_list = TSG_LENGTHS)
   selected_tb = dplyr::select(tsg_s, rowid, gene, coding, protein, aa_position, tsgInfo )
   readr::write_tsv(selected_tb, file = annotation_fp$TSG)
+
+  ## Horak Score
+  tsg_s = tsgParseTable(snvt, TSG_list = TSG_LENGTHS)
+  selected_tb = dplyr::select(tsg_s, rowid, gene, coding, protein, aa_position, tsgInfo )
+  readr::write_tsv(selected_tb, file = annotation_fp$TSG)
+
 }
