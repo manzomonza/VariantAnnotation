@@ -25,15 +25,6 @@ Horak_score_gnomad = function(gnomadpath){
 #lapply(df, function(x) Horak_score_gnomad(x$paths[4]))
 
 
-#' Horak_score_cancerHotspot = function(cancerhotspotpath){
-#'   ch = readr::read_tsv(cancerhotspotpath)
-#'   hscore = ifelse(!is.na(ch$mutation_position_count) & is.na(ch$mutation_count), 2,
-#'                   ifelse(!is.na(ch$mutation_position_count) & !is.na(ch$mutation_count), 4, 0))
-#'   ch$cancerHotspot_Hscore = hscore
-#'   return(ch)
-#' }
-
-
 
 #' Apply Horak scoring rule to considering cancerHotspot mutation counts
 #'

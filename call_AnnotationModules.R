@@ -16,7 +16,7 @@ horak_table = "~/github_app/VariantAnnotationModules/HorakScoreTable.txt"
 # df=tibble::as_tibble(df[,c(2,1)])
 # df = dplyr::group_by(df, sample)
 # df = dplyr::group_split(df)
-(horak_scores = Horak_score_function_calls(annotation_fp$paths))
+(horak_scores = Horak_score_function_calls(annotation_fp))
 
 Horak_vals = HorakScore(horak_scores)
 Horak_vals$classification = sapply(Horak_vals$Horak_score, Horak_classification)
