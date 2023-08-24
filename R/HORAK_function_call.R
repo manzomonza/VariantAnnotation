@@ -91,22 +91,20 @@ Horak_score_function_calls = function(annotation_paths){
   cancerhotspot_path = grep("annotation_cancerHotspot.tsv", annotation_paths, value = TRUE)
   tsg_path = grep("annotation_TSG.tsv", annotation_paths, value = TRUE)
 
-
-  if(gnomad_path != 'character(0)'){
+  if(!identical(gnomad_path, character(0))){
     gnomad_df = Horak_score_gnomad(gnomad_path)
   }
-  if(cancerhotspot_path != 'character(0)'){
+  if(!identical(cancerhotspot_path, character(0))){
     ch_df = Horak_score_cancerHotspot(cancerhotspot_path)
     chc_df = Horak_score_cancerHotspot_counts(cancerhotspot_path)
   }
-  if(tsg_path != 'character(0)'){
+  if(!identical(tsg_path, character(0))){
     tsg_df = Horak_score_TSG(tsg_path)
   }
   hscores = list(gnomad_df, ch_df, chc_df, tsg_df)
 
   return(hscores)
 }
-
 
 #' Sum up individual module scores to generate Horak Score
 #'
