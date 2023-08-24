@@ -78,6 +78,14 @@ Horak_score_cancerHotspot_counts = function(cancerhotspotpath){
 }
 
 
+#' Extract paths for annotation tables and call Horak scoring functions
+#'
+#' @param annotation_paths
+#'
+#' @return
+#' @export
+#'
+#' @examples
 Horak_score_function_calls = function(annotation_paths){
   gnomad_path = grep("annotation_gnomad.tsv", annotation_paths, value = TRUE)
   cancerhotspot_path = grep("annotation_cancerHotspot.tsv", annotation_paths, value = TRUE)
