@@ -1,101 +1,149 @@
 # ## HORAK scoring
-#
-#
-# # Read in cancerHotspots
-# # Read gnomad MAF
-#
-# # generate scores from google sheets -- Horak scoring
-# #Libraries
-# library(shiny)
-# library(shinydashboard)
-# library(purrr)
-# library(dplyr)
-# library(shinyWidgets)
-# library(DT)
-# library(shinyBS)
-#
-# tabledata1 <- data.frame(country = c("Australia","Australia","Australia","Australia","Australia"), Code =c("Rahil","Rahil","Rahil","Rahil","Rahil") ,cat = c(1,1,1,1,1))
-# un_sq <- unique(tabledata1$Code)
-# tempa <- list()
-#
-# ui <- dashboardPage(
-#   dashboardHeader(title = "Data Updation with collapsibility functionality" , disable = FALSE),
-#   dashboardSidebar(),
-#   dashboardBody(
-#
-#     fluidRow(
-#       box(
-#         title = "Table Structure", status = "primary", solidHeader = TRUE,
-#         collapsible = TRUE,width = 12,uiOutput("Works")
-#       )
-#     )
-#   )
-# )
-# server <- function(input,output,session){
-#   output$Works <- renderUI({
-#     lapply( 1:length(un_sq),function(i) {
-#       bsCollapse(id = "collapseExample",
-#                  bsCollapsePanel(un_sq[i],  dataTableOutput(paste("mytable", i , sep ="")), style = "primary")
-#       )
-#
-#     }
-#     )})
-#
-#
-#   shinyValue = function(id, len) {
-#     unlist(lapply(seq_len(len), function(i) {
-#       value = input[[paste0(id, i)]]
-#       if (is.null(value)) NA else value
-#     }))
-#   }
-#   Rahil = function(FUN, len, id, ...) {
-#     inputs = character(len)
-#     for (i in seq_len(len)) {
-#       inputs[i] = as.character(FUN(paste0(id, i), label = NULL, ...))
-#     }
-#     inputs
-#   }
-#   th <- function(){
-#
-#     for(i in 1:nrow(tabledata1)){
-#
-#       tempa[[i]]=data.frame(tabledata1[i,],Answer=   Rahil(radioButtons , nrow(tabledata1[i,]),paste0("radio" , i),selected ="yes" ,
-#                                                            choices =c("yes", "no"), inline= T),OP =  tabledata1$cat[i])
-#
-#     }
-#     return(do.call(rbind,tempa))
-#
-#
-#   }
-#
-#
-#   rea1 <- reactiveValues(df = th()
-#   )
-#   rea2<- reactive({rea1$df})
-#
-#   observeEvent(input$radio11,{
-#
-#     if(rea1$df$cat[1] == 1){
-#       rea1$df$cat[1] =2
-#       print(rea1$df$cat[1])
-#     }else{
-#       rea1$df$cat[1]=1
-#       print(rea1$df$cat[1])
-#     }
-#     rea2()
-#
-#
-#   })
-#
-#
-#
-#   output$mytable1 = DT::renderDataTable({rea2()},selection='none',server = FALSE, escape = FALSE,class = 'cell-border stripe', options = list(columnDefs = list(list(width = '600px', targets = 2),list(visible=FALSE)), ordering=F,pageLength = 10000,   lengthMenu = c(5, 10, 20, 100, 1000, 10000) , dom ="t",
-#                                                                                                                                               preDrawCallback = JS('function() {
-#                                                                                                                                                                  Shiny.unbindAll(this.api().table().node()); }'),
-#                                                                                                                                               drawCallback = JS('function() {
-#                                                                                                                                                               Shiny.bindAll(this.api().table().node()); } ')))
-#
-# }
-#
-#
-# shinyApp(ui, server)
+
+
+
+#' Apply Horak scoring rule to gnomad MAF
+#' if MAF > 5%, -8
+#' if 1% < MAF < 5%, -4
+#' absent or < 1%, 1
+#' @param gnomadpath
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Horak_score_gnomad = function(gnomadpath){
+  gnomad = readr::read_tsv(gnomadpath)
+  mafs = gnomad$gnomad_MAF
+  hscore = ifelse(is.na(mafs), 1,
+                  ifelse(mafs > 0.05, -8,
+                         ifelse(mafs > 0.01 & mafs < 0.05, -4, 1)))
+  gnomad$gnomad_hscore = hscore
+  return(gnomad)
+}
+
+#lapply(df, function(x) Horak_score_gnomad(x$paths[4]))
+
+#' Apply Horak scoring rule to considering cancerHotspot mutation counts
+#'
+#' @param cancerhotspotpath
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Horak_score_cancerHotspot = function(cancerhotspotpath){
+  ch = readr::read_tsv(cancerhotspotpath)
+  hscore = ifelse(!is.na(ch$mutation_position_count) & is.na(ch$mutation_count), 2,
+                  ifelse(!is.na(ch$mutation_position_count) & !is.na(ch$mutation_count), 4, 0))
+  ch$cancerHotspot_Hscore = hscore
+  return(ch)
+}
+
+
+
+#' Apply Horak scoring rule to considering cancerHotspot mutation counts
+#'
+#' @param cancerhotspotpath
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Horak_score_TSG = function(TSGpath){
+  tsg = readr::read_tsv(TSGpath)
+  hscore = ifelse(is.na(tsg$tsgInfo),0,
+                  ifelse(tsg$tsgInfo== "likely pathogenic",8, NA))
+  tsg$TSG_hscore = hscore
+  return(tsg)
+}
+
+
+#' Apply Horak scoring rule to considering cancerHotspot mutation counts
+#'
+#' @param cancerhotspotpath
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Horak_score_cancerHotspot_counts = function(cancerhotspotpath){
+  ch = readr::read_tsv(cancerhotspotpath)
+  hscore = ifelse(is.na(ch$mutation_position_count) & is.na(ch$mutation_count),0,
+                  ifelse(ch$mutation_position_count < 50 & ch$mutation_count >= 10, 2,
+                         ifelse(ch$mutation_position_count >= 50 & ch$mutation_count >= 10, 4,
+                                ifelse(!is.na(ch$mutation_position_count) & ch$mutation_count <= 10, 1, 0))))
+  ch$cancerHotspotCount_Hscore = hscore
+  return(ch)
+}
+
+
+Horak_score_function_calls = function(annotation_paths){
+  gnomad_path = grep("annotation_gnomad.tsv", annotation_paths, value = TRUE)
+  cancerhotspot_path = grep("annotation_cancerHotspot.tsv", annotation_paths, value = TRUE)
+  tsg_path = grep("annotation_TSG.tsv", annotation_paths, value = TRUE)
+
+
+  if(gnomad_path != 'character(0)'){
+    gnomad_df = Horak_score_gnomad(gnomad_path)
+  }
+  if(cancerhotspot_path != 'character(0)'){
+    ch_df = Horak_score_cancerHotspot(cancerhotspot_path)
+    chc_df = Horak_score_cancerHotspot_counts(cancerhotspot_path)
+  }
+  if(tsg_path != 'character(0)'){
+    tsg_df = Horak_score_TSG(tsg_path)
+  }
+  hscores = list(gnomad_df, ch_df, chc_df, tsg_df)
+
+  return(hscores)
+}
+
+
+#' Sum up individual module scores to generate Horak Score
+#'
+#' @param horak_scores
+#'
+#' @return
+#' @export
+#'
+#' @examples
+HorakScore = function(horak_scores){
+  horak_scores = lapply(horak_scores, function(x) dplyr::select(x, rowid, gene, contains("Hscore")))
+  hscores = purrr::reduce(horak_scores, dplyr::left_join, by = c("rowid", "gene"))
+  hscores = dplyr::group_by(hscores, rowid, gene)
+  hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspot_Hscore, cancerHotspotCount_Hscore, TSG_hscore, na.rm = TRUE ))
+  Horak_score_df = dplyr::select(hscores, rowid, gene, Horak_score )
+  horak_score_LUT = readr::read_tsv()
+  #hscores = lapply(hscores, function(x) tidyr::pivot_longer(x, -c(gene,rowid), names_to = "category", values_to = "HorakScore"))
+  # hscores = dplyr::bind_rows(hscores)
+  # hscores = dplyr::reframe(hscores, rowid, gene, HorakScore = sum(HorakScore, na.rm = TRUE))
+  # hscores = dplyr::distinct(hscores)
+  return(Horak_score_df)
+}
+
+
+
+#' Assign Horak Score classifications to values
+#'
+#' @param HorakScore
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Horak_classification = function(HorakScore){
+  if(HorakScore < -7){
+    return("benign")
+  }else if(HorakScore >= -6 & HorakScore <= -1){
+    return("likely bengign")
+  }else if(HorakScore >= 0 & HorakScore <= 5){
+    return("VUS")
+  }else if(HorakScore >= 6 & HorakScore <= 9){
+    return("likely oncogenic")
+  }else{
+    return('oncogenic')
+  }
+}
+
+

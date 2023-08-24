@@ -1,0 +1,19 @@
+score	classification
+-7	benign
+-6	likely benign
+-5	likely benign
+-4	likely benign
+-3	likely benign
+-2	likely benign
+-1	likely benign
+0	VUS
+1	VUS
+2	VUS
+3	VUS
+4	VUS
+5	VUS
+6	likely oncogenic
+7	likely oncogenic
+8	likely oncogenic
+9	likely oncogenic
+10	oncogenic

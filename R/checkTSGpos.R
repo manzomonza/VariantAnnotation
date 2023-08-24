@@ -36,8 +36,8 @@ tsgParseTable <- function(snvtable, TSG_list){
     asnv$tsgInfo = NA
     asnv$aa_position = NA
     for (i in 1:nrow(asnv)){
+      asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
       if(grepl("\\*|fs", asnv$protein[i])){
-        asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
         asnv$tsgInfo[i] = checkTSG(gene = asnv$gene[i],
                                        aa_pos = asnv$aa_position[i],
                                        TSG_list = TSG_list)
