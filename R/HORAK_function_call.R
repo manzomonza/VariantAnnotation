@@ -120,7 +120,6 @@ HorakScore = function(horak_scores){
   hscores = dplyr::group_by(hscores, rowid, gene)
   hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspot_Hscore, cancerHotspotCount_Hscore, TSG_hscore, na.rm = TRUE ))
   Horak_score_df = dplyr::select(hscores, rowid, gene, Horak_score )
-  horak_score_LUT = readr::read_tsv()
   #hscores = lapply(hscores, function(x) tidyr::pivot_longer(x, -c(gene,rowid), names_to = "category", values_to = "HorakScore"))
   # hscores = dplyr::bind_rows(hscores)
   # hscores = dplyr::reframe(hscores, rowid, gene, HorakScore = sum(HorakScore, na.rm = TRUE))
