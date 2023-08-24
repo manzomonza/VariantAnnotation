@@ -24,21 +24,14 @@ Horak_score_gnomad = function(gnomadpath){
 
 #lapply(df, function(x) Horak_score_gnomad(x$paths[4]))
 
-#' Apply Horak scoring rule to considering cancerHotspot mutation counts
-#'
-#' @param cancerhotspotpath
-#'
-#' @return
-#' @export
-#'
-#' @examples
-Horak_score_cancerHotspot = function(cancerhotspotpath){
-  ch = readr::read_tsv(cancerhotspotpath)
-  hscore = ifelse(!is.na(ch$mutation_position_count) & is.na(ch$mutation_count), 2,
-                  ifelse(!is.na(ch$mutation_position_count) & !is.na(ch$mutation_count), 4, 0))
-  ch$cancerHotspot_Hscore = hscore
-  return(ch)
-}
+
+#' Horak_score_cancerHotspot = function(cancerhotspotpath){
+#'   ch = readr::read_tsv(cancerhotspotpath)
+#'   hscore = ifelse(!is.na(ch$mutation_position_count) & is.na(ch$mutation_count), 2,
+#'                   ifelse(!is.na(ch$mutation_position_count) & !is.na(ch$mutation_count), 4, 0))
+#'   ch$cancerHotspot_Hscore = hscore
+#'   return(ch)
+#' }
 
 
 
@@ -95,13 +88,12 @@ Horak_score_function_calls = function(annotation_paths){
     gnomad_df = Horak_score_gnomad(gnomad_path)
   }
   if(!identical(cancerhotspot_path, character(0))){
-    ch_df = Horak_score_cancerHotspot(cancerhotspot_path)
     chc_df = Horak_score_cancerHotspot_counts(cancerhotspot_path)
   }
   if(!identical(tsg_path, character(0))){
     tsg_df = Horak_score_TSG(tsg_path)
   }
-  hscores = list(gnomad_df, ch_df, chc_df, tsg_df)
+  hscores = list(gnomad_df, chc_df, tsg_df)
 
   return(hscores)
 }
@@ -118,7 +110,7 @@ HorakScore = function(horak_scores){
   horak_scores = lapply(horak_scores, function(x) dplyr::select(x, rowid, gene, contains("Hscore")))
   hscores = purrr::reduce(horak_scores, dplyr::left_join, by = c("rowid", "gene"))
   hscores = dplyr::group_by(hscores, rowid, gene)
-  hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspot_Hscore, cancerHotspotCount_Hscore, TSG_hscore, na.rm = TRUE ))
+  hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspotCount_Hscore, TSG_hscore, na.rm = TRUE ))
   Horak_score_df = dplyr::select(hscores, rowid, gene, Horak_score )
   #hscores = lapply(hscores, function(x) tidyr::pivot_longer(x, -c(gene,rowid), names_to = "category", values_to = "HorakScore"))
   # hscores = dplyr::bind_rows(hscores)
