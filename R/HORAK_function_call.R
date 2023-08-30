@@ -56,7 +56,7 @@ Horak_score_cancerHotspot_counts = function(cancerhotspotpath){
   hscore = ifelse(is.na(ch$mutation_position_count) & is.na(ch$mutation_count),0,
                   ifelse(ch$mutation_position_count < 50 & ch$mutation_count >= 10, 2,
                          ifelse(ch$mutation_position_count >= 50 & ch$mutation_count >= 10, 4,
-                                ifelse(!is.na(ch$mutation_position_count) & ch$mutation_count <= 10, 1, 0))))
+                                ifelse(ch$mutation_count <= 10, 1, 0))))
   ch$cancerHotspotCount_Hscore = hscore
   return(ch)
 }
