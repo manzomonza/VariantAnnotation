@@ -124,7 +124,7 @@ Horak_classification = function(HorakScore){
   if(HorakScore < -7){
     return("benign")
   }else if(HorakScore >= -6 & HorakScore <= -1){
-    return("likely bengign")
+    return("likely benign")
   }else if(HorakScore >= 0 & HorakScore <= 5){
     return("VUS")
   }else if(HorakScore >= 6 & HorakScore <= 9){
