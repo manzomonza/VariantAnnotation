@@ -30,6 +30,15 @@ clinvarCheck <- function(){
 }
 
 
+#' Calls function to process variant table and check variants for entries in Clinvar table
+#'
+#' @param snv_table
+#' @param clinvar
+#'
+#' @return
+#' @export
+#'
+#' @examples
 ClinVar_function_call = function(snv_table, clinvar){
   asnv = amino_acid_code_1_to_3(snv_table)
   asnv$protein = unname(sapply(asnv$protein, fsClinvarfix))
