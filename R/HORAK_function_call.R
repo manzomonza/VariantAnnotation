@@ -1,7 +1,5 @@
 # ## HORAK scoring
 
-
-
 #' Apply Horak scoring rule to gnomad MAF
 #' if MAF > 5%, -8
 #' if 1% < MAF < 5%, -4
@@ -23,6 +21,23 @@ Horak_score_gnomad = function(gnomadpath){
 }
 
 #lapply(df, function(x) Horak_score_gnomad(x$paths[4]))
+
+#' Apply Horak scoring rule to considering cancerHotspot mutation counts
+#'
+#' @param cancerhotspotpath
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Horak_score_oncogenpos = function(oncogenPos_path){
+  tsg = readr::read_tsv(oncogenPos_path)
+  hscore = ifelse(is.na(tsg$tsgInfo),0,
+                  ifelse(tsg$tsgInfo == "likely pathogenic",8, NA))
+  tsg$TSG_hscore = hscore
+  return(tsg)
+}
+
 
 
 
@@ -74,6 +89,7 @@ Horak_score_function_calls = function(annotation_paths){
   gnomad_path = grep("annotation_gnomad.tsv", annotation_paths, value = TRUE)
   cancerhotspot_path = grep("annotation_cancerHotspot.tsv", annotation_paths, value = TRUE)
   tsg_path = grep("annotation_TSG.tsv", annotation_paths, value = TRUE)
+  oncogenpos_path = grep("annotation_oncogenicPositions.tsv", annotation_paths, value = TRUE)
 
   if(!identical(gnomad_path, character(0))){
     gnomad_df = Horak_score_gnomad(gnomad_path)
@@ -84,9 +100,13 @@ Horak_score_function_calls = function(annotation_paths){
   if(!identical(tsg_path, character(0))){
     tsg_df = Horak_score_TSG(tsg_path)
   }
-  hscores = list(gnomad_df, chc_df, tsg_df)
+  if(!identical(oncogenpos_path, character(0))){
+    oncogenpos_df = Horak_score_oncogenPos(oncogenpos_path)
+  }
 
-  return(hscores)
+  horak_scores = list(gnomad_df, chc_df, tsg_df,oncogenpos_df)
+
+  return(horak_scores)
 }
 
 #' Sum up individual module scores to generate Horak Score

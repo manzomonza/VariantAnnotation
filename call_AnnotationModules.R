@@ -5,6 +5,9 @@
 
 horak_table = "~/github_app/VariantAnnotationModules/HorakScoreTable.txt"
 ONCOGEN_POSITIONS = readr::read_tsv("/mnt/NGS_Diagnostik/Variant_databases/OncoKB/Oncokb_Clinvar_oncogenic_positions.tsv")
+ONCOGEN_POSITIONS$ProteinChangePosition = stringr::str_extract(string = ONCOGEN_POSITIONS$ProteinChange, pattern = "(?<=\\D)\\d+")
+
+
 
 snvt = readr::read_tsv(parsed_fp$parsed_snv)
 annotation_fp = VariantAnnotationModules::annotation_filepaths(analysis_dir)

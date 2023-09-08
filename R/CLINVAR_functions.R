@@ -115,7 +115,12 @@ clinvar_filtering = function(genestr,codingstr, proteinstr, clinvar){
   else if(nrow(clinvar_hit) ==0){
     return(NA)
   }else if(nrow(clinvar_hit) >1){
-    return('multiple entries')
+    clinvar_hit = dplyr::filter(clinvar_hit, grepl("somatic",origin_simple))
+    if(nrow(clinvar_hit) ==1){
+      return(clinvar_hit)
+    }else{
+      return('multiple entries')
+      }
   }
 }
 
