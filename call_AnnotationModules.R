@@ -8,7 +8,7 @@ ONCOGEN_POSITIONS = readr::read_tsv("/mnt/NGS_Diagnostik/Variant_databases/OncoK
 ONCOGEN_POSITIONS$ProteinChangePosition = stringr::str_extract(string = ONCOGEN_POSITIONS$ProteinChange, pattern = "(?<=\\D)\\d+")
 
 
-oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, oncogen_pos = ONCOGEN_POSITIONS)
+oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, oncogen_vars = ONCOGEN_POSITIONS)
 readr::write_tsv(oncogenpositions, file=annotation_fp$oncogenPos)
 
 snvt = readr::read_tsv(parsed_fp$parsed_snv)
