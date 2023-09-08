@@ -101,7 +101,7 @@ Horak_score_function_calls = function(annotation_paths){
     tsg_df = Horak_score_TSG(tsg_path)
   }
   if(!identical(oncogenpos_path, character(0))){
-    oncogenpos_df = Horak_score_oncogenPos(oncogenpos_path)
+    oncogenpos_df = Horak_score_oncogenpos(oncogenpos_path)
   }
 
   horak_scores = list(gnomad_df, chc_df, tsg_df,oncogenpos_df)

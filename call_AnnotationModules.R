@@ -8,6 +8,8 @@ ONCOGEN_POSITIONS = readr::read_tsv("/mnt/NGS_Diagnostik/Variant_databases/OncoK
 ONCOGEN_POSITIONS$ProteinChangePosition = stringr::str_extract(string = ONCOGEN_POSITIONS$ProteinChange, pattern = "(?<=\\D)\\d+")
 
 
+oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, oncogen_pos = ONCOGEN_POSITIONS)
+readr::write_tsv(oncogenpositions, file=annotation_fp$oncogenPos)
 
 snvt = readr::read_tsv(parsed_fp$parsed_snv)
 annotation_fp = VariantAnnotationModules::annotation_filepaths(analysis_dir)
@@ -20,14 +22,16 @@ write_Annotation_Modules(snvt, annotation_fp = annotation_fp)
 # df=tibble::as_tibble(df[,c(2,1)])
 # df = dplyr::group_by(df, sample)
 # df = dplyr::group_split(df)
+#### ONCOGENICpositions
+
+
+
+
 (horak_scores = Horak_score_function_calls(annotation_fp))
 
 Horak_vals = HorakScore(horak_scores)
 Horak_vals$classification = sapply(Horak_vals$Horak_score, Horak_classification)
 readr::write_tsv(Horak_vals, file=annotation_fp$Horak)
 
-#### ONCOGENICpositions
 
-oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, oncogen_pos = ONCOGEN_POSITIONS)
-readr::write_tsv(oncogenpositions, file=annotation_fp$oncogenPos)
 
