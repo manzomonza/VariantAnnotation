@@ -24,7 +24,7 @@ Horak_score_gnomad = function(gnomadpath){
 
 #' Apply Horak scoring rule to considering cancerHotspot mutation counts
 #'
-#' @param cancerhotspotpath
+#' @param oncogenPos_path
 #'
 #' @return
 #' @export

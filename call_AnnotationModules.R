@@ -28,6 +28,6 @@ readr::write_tsv(Horak_vals, file=annotation_fp$Horak)
 
 #### ONCOGENICpositions
 
-oncogenpositions = table_retrieve_oncogen_positions(parsed_fp$parsed_snv, oncogen_pos = ONCOGEN_POSITIONS)
+oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, oncogen_pos = ONCOGEN_POSITIONS)
 readr::write_tsv(oncogenpositions, file=annotation_fp$oncogenPos)
 
