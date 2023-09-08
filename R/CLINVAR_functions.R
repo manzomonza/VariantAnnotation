@@ -106,8 +106,6 @@ clinvar_filtering = function(genestr,codingstr, proteinstr, clinvar){
   if(nrow(clinvar_hit) !=1){
     clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
     clinvar_hit = clinvar_check_protein(proteinstr = proteinstr, clinvar_fil = clinvar_hit)
-  }else{
-    return(clinvar_hit)
   }
   if(nrow(clinvar_hit) ==1){
     return(clinvar_hit)
