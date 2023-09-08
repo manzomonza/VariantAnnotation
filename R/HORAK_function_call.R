@@ -31,15 +31,12 @@ Horak_score_gnomad = function(gnomadpath){
 #'
 #' @examples
 Horak_score_oncogenpos = function(oncogenPos_path){
-  tsg = readr::read_tsv(oncogenPos_path)
-  hscore = ifelse(is.na(tsg$tsgInfo),0,
-                  ifelse(tsg$tsgInfo == "likely pathogenic",8, NA))
-  tsg$TSG_hscore = hscore
-  return(tsg)
+  oncogenPos_df = readr::read_tsv(oncogenPos_path)
+  oncogenPos_df$oncPos_hscore = ifelse(!is.na(oncogenPos_df$oncogenic_var), 4,
+                                       ifelse(!is.na(oncogenPos_df$oncogenic_pos), 2, 0))
+
+  return(oncogenPos_df)
 }
-
-
-
 
 #' Apply Horak scoring rule to considering cancerHotspot mutation counts
 #'
@@ -104,7 +101,7 @@ Horak_score_function_calls = function(annotation_paths){
     oncogenpos_df = Horak_score_oncogenpos(oncogenpos_path)
   }
 
-  horak_scores = list(gnomad_df, chc_df, tsg_df,oncogenpos_df)
+  horak_scores = list(gnomad_df, chc_df, tsg_df, oncogenpos_df)
 
   return(horak_scores)
 }
@@ -121,7 +118,7 @@ HorakScore = function(horak_scores){
   horak_scores = lapply(horak_scores, function(x) dplyr::select(x, rowid, gene, contains("Hscore")))
   hscores = purrr::reduce(horak_scores, dplyr::left_join, by = c("rowid", "gene"))
   hscores = dplyr::group_by(hscores, rowid, gene)
-  hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspotCount_Hscore, TSG_hscore, na.rm = TRUE ))
+  hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspotCount_Hscore, TSG_hscore, oncPos_hscore, na.rm = TRUE ))
   Horak_score_df = dplyr::select(hscores, rowid, gene, Horak_score )
   #hscores = lapply(hscores, function(x) tidyr::pivot_longer(x, -c(gene,rowid), names_to = "category", values_to = "HorakScore"))
   # hscores = dplyr::bind_rows(hscores)
