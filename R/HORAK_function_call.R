@@ -33,7 +33,7 @@ Horak_score_gnomad = function(gnomadpath){
 Horak_score_oncogenpos = function(oncogenPos_path){
   oncogenPos_df = readr::read_tsv(oncogenPos_path)
   oncogenPos_df$oncPos_hscore = ifelse(!is.na(oncogenPos_df$oncogenic_var), 4,
-                                       ifelse(!is.na(oncogenPos_df$oncogenic_pos), 2, 0))
+                                       ifelse(!is.na(oncogenPos_df$oncogenic_position), 2, 0))
 
   return(oncogenPos_df)
 }
@@ -126,7 +126,6 @@ HorakScore = function(horak_scores){
   # hscores = dplyr::distinct(hscores)
   return(Horak_score_df)
 }
-
 
 
 #' Assign Horak Score classifications to values
