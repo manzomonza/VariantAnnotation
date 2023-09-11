@@ -4,7 +4,7 @@
 \alias{HorakScore}
 \title{Sum up individual module scores to generate Horak Score}
 \usage{
-HorakScore(horak_scores)
+HorakScore(horak_scores, horakScore_fp)
 }
 \arguments{
 \item{horak_scores}{}

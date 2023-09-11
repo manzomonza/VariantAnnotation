@@ -26,7 +26,7 @@ write_Annotation_Modules(snvt, annotation_fp = annotation_fp)
 
 
 (horak_scores = Horak_score_function_calls(annotation_fp))
-Horak_vals = HorakScore(horak_scores)
+Horak_vals = HorakScore(horak_scores, horakScore_fp = annotation_fp$HorakScoreListings)
 Horak_vals$classification = sapply(Horak_vals$Horak_score, Horak_classification)
 readr::write_tsv(Horak_vals, file=annotation_fp$Horak)
 

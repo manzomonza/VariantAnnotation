@@ -18,6 +18,7 @@ annotation_filepaths = function(output_path){
                    Horak = paste0(annotation_dir, '/annotation_horak.tsv'),
                    TSG = paste0(annotation_dir, '/annotation_TSG.tsv'),
                    oncogenPos = paste0(annotation_dir, '/annotation_oncogenicPositions.tsv'),
+                   HorakScoreListings = paste0(annotation_dir, '/annotation_HorakScoreListings.tsv'),
                    filepaths = paste0(annotation_dir,'/annotation_filepaths.tsv'))
   return(filepaths)
 }
