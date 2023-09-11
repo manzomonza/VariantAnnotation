@@ -7,7 +7,7 @@
 Horak_score_oncogenpos(oncogenPos_path)
 }
 \arguments{
-\item{cancerhotspotpath}{}
+\item{oncogenPos_path}{}
 }
 \description{
 Apply Horak scoring rule to considering cancerHotspot mutation counts

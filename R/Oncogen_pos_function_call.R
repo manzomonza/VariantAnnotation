@@ -67,7 +67,6 @@ table_retrieve_oncogenic_information = function(filepath, oncogen_vars){
   toi = readr::read_tsv(filepath)
   toi = VariantAnnotationModules::amino_acid_code_3_to_1(toi)
   toi$ChangePosition = stringr::str_extract(string = toi$protein, pattern = "(?<=\\D)\\d+")
-
   toi$oncogenic_var = NA
   toi$oncogenic_position = NA
   ####
