@@ -118,6 +118,7 @@ HorakScore = function(horak_scores){
   horak_scores = lapply(horak_scores, function(x) dplyr::select(x, rowid, gene, contains("Hscore")))
   hscores = purrr::reduce(horak_scores, dplyr::left_join, by = c("rowid", "gene"))
   hscores = dplyr::group_by(hscores, rowid, gene)
+  readr::write_tsv(hscores, "./annotation_output/HorakScores.tsv")
   hscores = dplyr::mutate(hscores, Horak_score = sum(gnomad_hscore, cancerHotspotCount_Hscore, TSG_hscore, oncPos_hscore, na.rm = TRUE ))
   Horak_score_df = dplyr::select(hscores, rowid, gene, Horak_score )
   #hscores = lapply(hscores, function(x) tidyr::pivot_longer(x, -c(gene,rowid), names_to = "category", values_to = "HorakScore"))
@@ -126,7 +127,6 @@ HorakScore = function(horak_scores){
   # hscores = dplyr::distinct(hscores)
   return(Horak_score_df)
 }
-
 
 #' Assign Horak Score classifications to values
 #'
@@ -149,5 +149,3 @@ Horak_classification = function(HorakScore){
     return('oncogenic')
   }
 }
-
-
