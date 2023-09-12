@@ -19,7 +19,7 @@ write_Annotation_Modules = function(snvt, annotation_fp){
   readr::write_tsv(selected_tb, file = annotation_fp$COSMIC)
 
   ## Gnomad
-  gnomad_s = attach_gnomad_MAF(snvt, gnomad = GNOMAD)
+  gnomad_s = table_retrieve_gnomad_MAF(snvt, gnomad = GNOMAD)
   selected_tb = dplyr::select(gnomad_s, rowid, gene, ref,alt, coding, protein, contains("gnomad")  )
   readr::write_tsv(selected_tb, file = annotation_fp$gnomad)
 
