@@ -43,9 +43,10 @@ gnomad_coding_protein_MAF = function(chr, codingstr, proteinstr, position, gnoma
 
   if(is.na(is.na(codingstr)) & is.na(proteinstr)){
     return(NA)
-  }else  if(is.na(codingstr)){
+  }
+  if(!is.na(proteinstr)){
     gnomad_hit = dplyr::filter(gnomad_hit, protein == proteinstr)
-  }else{
+    }else{
     gnomad_hit = dplyr::filter(gnomad_hit, coding == codingstr)
   }
   if(nrow(gnomad_hit) == 1){
