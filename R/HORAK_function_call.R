@@ -54,7 +54,7 @@ Horak_score_TSG = function(TSGpath){
       aa_position = as.numeric(tsg$aa_position[i])
       protein_length = as.numeric(tsg$protein_length[i])
 
-      if(tsg$canonical_splicesite[i] == TRUE){
+      if(!is.na(tsg$canonical_splicesite[i])){
         hscore = 8
       }else if(!is.na(aa_position) & !is.na(protein_length)){
         length_ratio = aa_position/protein_length <= 0.95
