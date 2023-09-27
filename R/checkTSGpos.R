@@ -44,7 +44,7 @@ canonical_splicesite = function(numberlist){
 }
 
 
-#' tsgParseTable Checks SNV contains 'fs' or 'Ter'
+#' TSG_check_function_call Checks SNV contains 'fs' or 'Ter'
 #'
 #' @param snvtable
 #'
