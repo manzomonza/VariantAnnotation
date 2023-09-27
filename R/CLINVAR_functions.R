@@ -48,9 +48,8 @@ ClinVar_function_call = function(snv_table, clinvar){
     clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr = asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
     if(typeof(clinhit) == 'list'){
       clinhit = somatic_filtering(clinhit)
-
       asnv$ClinVar_Significance[i] = paste0(clinhit$clinical_significance, collapse = ";")
-      asnv$ClinVar_VariationID[i] = unique(clinhit$variation_id)
+      asnv$ClinVar_VariationID[i] = paste0(clinhit$variation_id, collapse = ";")
       # if(nrow(clinhit) !=1){
       #   asnv$ClinVar_Significance[i] = list(clinhit$clinical_significance)
       #   asnv$ClinVar_VariationID[i] = list(clinhit$variation_id)
