@@ -29,8 +29,8 @@ write_Annotation_Modules = function(snvt, annotation_fp){
   readr::write_tsv(selected_tb, file = annotation_fp$clinvar)
 
   ## TSG info
-  tsg_s = tsgParseTable(snvt, TSG_list = TSG_LENGTHS)
-  selected_tb = dplyr::select(tsg_s, rowid, gene, coding, protein, aa_position, tsgInfo )
+  tsg_s = TSG_check_function_call(snvt, TSG_list = TSG_LENGTHS)
+  selected_tb = dplyr::select(tsg_s, rowid, gene, coding, protein,TSG,canonical_splicesite, aa_position, protein_length )
   readr::write_tsv(selected_tb, file = annotation_fp$TSG)
 
   ## Horak Score

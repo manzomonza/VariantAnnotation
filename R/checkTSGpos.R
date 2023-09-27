@@ -8,17 +8,39 @@
 #' @export
 #'
 #' @examples
-checkTSG <- function(gene, aa_pos, TSG_list){
-  if(gene %in% names(TSG_list) & !is.na(aa_pos)){
-    if(aa_pos <= round(0.9 * TSG_list[[gene]])){
-      interpretation = 'likely pathogenic'
-      return(interpretation)
-    }else{
-      return(NA)
-    }
-  }else{
-    return(NA)
-  }
+TSG_length <- function(gene, TSG_list){
+  tsg_l = TSG_list[[gene]]
+  return(tsg_l)
+}
+
+
+#' Extracts digits following +/- annotation in codingstring
+#' Importantly, only extracts first hit
+#'
+#' @param codingstring
+#'
+#' @return
+#' @export
+#'
+#' @examples
+extract_splitesite = function(codingstring){
+  codingpos = unlist(stringr::str_extract_all(codingstring, pattern = "(?<=\\+|-)\\d{1,}"))
+  return(codingpos)
+}
+
+
+#' Determine if splice is at +/- 1 or 2 position relative to coding position
+#'
+#' @param numberlist
+#'
+#' @return
+#' @export
+#'
+#' @examples
+canonical_splicesite = function(numberlist){
+  numbervec = unlist(numberlist)
+  plusminus_1_or2 = any(numbervec %in% 1:2)
+  return(plusminus_1_or2)
 }
 
 
@@ -30,22 +52,35 @@ checkTSG <- function(gene, aa_pos, TSG_list){
 #' @export
 #'
 #' @examples
-tsgParseTable <- function(snvtable, TSG_list){
+TSG_check_function_call <- function(snvtable, TSG_list){
   if(nrow(snvtable) >0){
     asnv = VariantAnnotationModules::amino_acid_code_3_to_1(snvtable)
-    asnv$tsgInfo = NA
+    asnv$TSG = NA
+    asnv$canonical_splicesite = NA
     asnv$aa_position = NA
-    for (i in 1:nrow(asnv)){
-      asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
-      if(grepl("\\*|fs", asnv$protein[i])){
-        asnv$tsgInfo[i] = checkTSG(gene = asnv$gene[i],
-                                       aa_pos = asnv$aa_position[i],
-                                       TSG_list = TSG_list)
+    asnv$protein_length = NA
 
+    for (i in 1:nrow(asnv)){
+      if(asnv$gene[i] %in% names(TSG_list)){
+        asnv$TSG[i] = TRUE
+        if(is.na(asnv$protein[i])){
+          if(grepl("splice", asnv$location[i])){
+            splicesite = extract_splitesite(asnv$coding[i])
+            asnv$canonical_splicesite[i] = canonical_splicesite(splicesite)
+          }
+        }else{
+          if(grepl("\\*|fs", asnv$protein[i])){
+            asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
+            asnv$protein_length = TSG_list[[asnv$gene[i]]]
+          }else{
+            next
+          }
+        }
+      }else{
+        next
       }
     }
-    #snvtable <- subset(snvtable, selec=-aa_position)
-
     return(asnv)
   }
 }
+
