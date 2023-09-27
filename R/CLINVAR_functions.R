@@ -106,7 +106,7 @@ fsClinvarfix <- function(amino_acid_change){
 #'
 #' @examples
 clinvar_filtering = function(genestr, codingstr, proteinstr, clinvar){
-
+  proteinstr = ifelse(proteinstr == "p.?", NA, proteinstr)
   if(is.na(codingstr) & is.na(proteinstr)){
     return(NA)
     }
@@ -230,10 +230,3 @@ clinvar_check_protein = function(proteinstr, clinvar_fil){
   clinvar_fil = dplyr::filter(clinvar_fil, grepl(proteinstr, name, fixed = TRUE ))
   return(clinvar_fil)
 }
-
-
-
-
-
-
-

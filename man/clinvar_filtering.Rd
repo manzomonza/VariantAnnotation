@@ -3,7 +3,7 @@
 \name{clinvar_filtering}
 \alias{clinvar_filtering}
 \title{Filter CLINVAR table based on gene, protein coding first.
-If no}
+If coding and protein are  given, but coding does not match, then search for proteinstr only}
 \usage{
 clinvar_filtering(genestr, codingstr, proteinstr, clinvar)
 }
@@ -12,5 +12,5 @@ clinvar_filtering(genestr, codingstr, proteinstr, clinvar)
 }
 \description{
 Filter CLINVAR table based on gene, protein coding first.
-If no
+If coding and protein are  given, but coding does not match, then search for proteinstr only
 }
