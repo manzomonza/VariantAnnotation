@@ -61,7 +61,8 @@ TSG_check_function_call <- function(snvtable, TSG_list){
     asnv$protein_length = NA
 
     for (i in 1:nrow(asnv)){
-      if(asnv$gene[i] %in% names(TSG_list)){
+      genestring = as.character(asnv$gene[i])
+      if(genestring %in% names(TSG_list)){
         asnv$TSG[i] = TRUE
         if(is.na(asnv$protein[i])){
           if(grepl("splice", asnv$location[i])){
@@ -71,7 +72,7 @@ TSG_check_function_call <- function(snvtable, TSG_list){
         }else{
           if(grepl("\\*|fs", asnv$protein[i])){
             asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
-            asnv$protein_length = TSG_list[[asnv$gene[i]]]
+            asnv$protein_length = TSG_list[[genestring]]
           }else{
             next
           }
