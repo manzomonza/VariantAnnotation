@@ -54,12 +54,11 @@ Horak_score_TSG = function(TSGpath){
       aa_position = as.numeric(tsg$aa_position[i])
       protein_length = as.numeric(tsg$protein_length[i])
       length_ratio = aa_position/protein_length <= 0.95
-      if(length_ratio | tsg$canonical_splicesite[i]){
+      if(any(c(length_ratio,tsg$canonical_splicesite[i]) == TRUE)){
         hscore = 8
       }else{
         hscore = 0
       }
-
     }else{
       hscore = 0
     }
@@ -67,6 +66,9 @@ Horak_score_TSG = function(TSGpath){
   }
   return(tsg)
 }
+
+
+
 
 #' Apply Horak scoring rule to considering cancerHotspot mutation counts
 #'
