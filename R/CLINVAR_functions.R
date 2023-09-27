@@ -47,8 +47,14 @@ ClinVar_function_call = function(snv_table, clinvar){
   for(i in 1:nrow(asnv)){
     clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr = asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
     if(typeof(clinhit) == 'list'){
-      asnv$ClinVar_Significance[i] = clinhit$clinical_significance
-      asnv$ClinVar_VariationID[i] = clinhit$variation_id
+      clinhit = somatic_filtering(clinhit)
+      if(nrow(clinhit) !=1){
+        asnv$ClinVar_Significance[i] = list(clinhit$clinical_significance)
+        asnv$ClinVar_VariationID[i] = list(clinhit$variation_id)
+      }else{
+        asnv$ClinVar_Significance[i] = clinhit$clinical_significance
+        asnv$ClinVar_VariationID[i] = clinhit$variation_id
+      }
     }else{
       next
     }
@@ -88,7 +94,7 @@ fsClinvarfix <- function(amino_acid_change){
 
 
 #' Filter CLINVAR table based on gene, protein coding first.
-#' If no
+#' If coding and protein are  given, but coding does not match, then search for proteinstr only
 #'
 #' @param genestr
 #' @param codingstr
@@ -99,28 +105,56 @@ fsClinvarfix <- function(amino_acid_change){
 #' @export
 #'
 #' @examples
-clinvar_filtering = function(genestr,codingstr, proteinstr, clinvar){
-  clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
-  clinvar_hit = clinvar_check_protein(proteinstr = proteinstr, clinvar_fil = clinvar_hit)
-  clinvar_hit = clinvar_check_coding(codingstr = codingstr, clinvar_fil = clinvar_hit)
-  if(nrow(clinvar_hit) !=1){
+clinvar_filtering = function(genestr, codingstr, proteinstr, clinvar){
+
+  if(is.na(codingstr) & is.na(proteinstr)){
+    return(NA)
+    }
+
+  if(!is.na(codingstr) & is.na(proteinstr)){
+    clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
+    clinvar_hit = clinvar_check_coding(codingstr = codingstr, clinvar_fil = clinvar_hit)
+    return(clinvar_hit)
+    }
+
+  if(is.na(codingstr) & !is.na(proteinstr)){
     clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
     clinvar_hit = clinvar_check_protein(proteinstr = proteinstr, clinvar_fil = clinvar_hit)
-  }
-  if(nrow(clinvar_hit) ==1){
     return(clinvar_hit)
   }
-  else if(nrow(clinvar_hit) ==0){
-    return(NA)
-  }else if(nrow(clinvar_hit) >1){
-    clinvar_hit = dplyr::filter(clinvar_hit, grepl("somatic", origin_simple))
-    if(nrow(clinvar_hit) ==1){
-      return(clinvar_hit)
-    }else{
-      return('multiple entries')
-      }
+
+  if(!is.na(codingstr) & !is.na(proteinstr)){
+    clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
+    clinvar_hit = clinvar_check_coding(codingstr = codingstr, clinvar_fil = clinvar_hit)
+    clinvar_hit = clinvar_check_protein(proteinstr = proteinstr, clinvar_fil = clinvar_hit)
+    if(nrow(clinvar_hit) == 0){
+      clinvar_hit = clinvar_check_gene(genestr = genestr, clinvar_fil = clinvar)
+      clinvar_hit = clinvar_check_protein(proteinstr = proteinstr, clinvar_fil = clinvar_hit)
+    }
+    return(clinvar_hit)
   }
 }
+
+
+
+
+#' Filter for 'somatic' classification  in case of multiple ClinVar entries
+#'
+#' @param clinvarhits
+#'
+#' @return
+#' @export
+#'
+#' @examples
+somatic_filtering = function(clinvarhits){
+  if(nrow(clinvarhits) == 1){
+    return(clinvarhits)
+    }
+  clinvarhits = dplyr::filter(clinvarhits, grepl("somatic", origin_simple))
+  return(clinvarhits)
+}
+
+
 
 #' Return Clinical significance entry from Clinvar table
 #'
