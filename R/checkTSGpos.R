@@ -72,7 +72,7 @@ TSG_check_function_call <- function(snvtable, TSG_list){
         }else{
           if(grepl("\\*|fs", asnv$protein[i])){
             asnv$aa_position[i] = extract_number_from_alphanumeric_string(asnv$protein[i])
-            asnv$protein_length = TSG_list[[genestring]]
+            asnv$protein_length[i] = TSG_list[[genestring]]
           }else{
             next
           }
