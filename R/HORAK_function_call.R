@@ -48,12 +48,25 @@ Horak_score_oncogenpos = function(oncogenPos_path){
 #' @examples
 Horak_score_TSG = function(TSGpath){
   tsg = readr::read_tsv(TSGpath)
-  hscore = ifelse(is.na(tsg$tsgInfo),0,
-                  ifelse(tsg$tsgInfo== "likely pathogenic",8, NA))
-  tsg$TSG_hscore = hscore
+  tsg$TSG_hscore = NA
+  for (i in 1:nrow(tsg)){
+    if(tsg$TSG[i] == TRUE){
+      aa_position = as.numeric(tsg$aa_position[i])
+      protein_length = as.numeric(tsg$protein_length[i])
+      length_ratio = aa_position/protein_length <= 0.95
+      if(length_ratio | tsg$canonical_splicesite[i]){
+        hscore = 8
+      }else{
+        hscore = 0
+      }
+
+    }else{
+      hscore = 0
+    }
+    tsg$TSG_hscore[i] = hscore
+  }
   return(tsg)
 }
-
 
 #' Apply Horak scoring rule to considering cancerHotspot mutation counts
 #'

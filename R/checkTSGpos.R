@@ -57,6 +57,7 @@ TSG_check_function_call <- function(snvtable, TSG_list){
     asnv = VariantAnnotationModules::amino_acid_code_3_to_1(snvtable)
     asnv$TSG = NA
     asnv$canonical_splicesite = NA
+    asnv$protein_alteration_site = NA
     asnv$aa_position = NA
     asnv$protein_length = NA
 
