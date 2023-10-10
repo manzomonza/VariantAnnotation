@@ -15,6 +15,16 @@ snvt = readr::read_tsv(parsed_fp$parsed_snv)
 annotation_fp = VariantAnnotationModules::annotation_filepaths(analysis_dir)
 write_Annotation_Modules(snvt, annotation_fp = annotation_fp)
 
+### MP Variant Table
+source("/home/ionadmin/github/GDrive_VariantReport/Gauths.R")
+idoi = googledrive::as_id("https://docs.google.com/spreadsheets/d/1B-NfpRNhadl7w1f5UPkRA_XEg4YI3N4pHRxd9yZgZkc/edit?usp=drive_web&ouid=116704210424700639172")
+MPvars = googlesheets4::read_sheet(idoi, skip = 1)
+
+
+mpvs = MP_check_retrieve_table(snvt, MPvars)
+mpv_filepath = paste0(analysis_dir,'/annotation_output/annotation_MP_variant.tsv')
+readr::write_tsv(mpvs, file = fmpv_filepath )
+
 # testpath = '/Users/manzo/USB/USB_Diagnostics/ShinyVariants/testfiles'
 # df = data.frame(paths = list.files(path = testpath, pattern = "annotation_", recursive = TRUE, full.names = TRUE))
 #

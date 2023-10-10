@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkTSGpos.R
 \name{TSG_check_function_call}
 \alias{TSG_check_function_call}
-\title{tsgParseTable Checks SNV contains 'fs' or 'Ter'}
+\title{TSG_check_function_call Checks SNV contains 'fs' or 'Ter'}
 \usage{
 TSG_check_function_call(snvtable, TSG_list)
 }
@@ -13,5 +13,5 @@ TSG_check_function_call(snvtable, TSG_list)
 snvtable with tsgInfo column added
 }
 \description{
-tsgParseTable Checks SNV contains 'fs' or 'Ter'
+TSG_check_function_call Checks SNV contains 'fs' or 'Ter'
 }
