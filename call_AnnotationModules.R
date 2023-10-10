@@ -23,7 +23,7 @@ MPvars = googlesheets4::read_sheet(idoi, skip = 1)
 
 mpvs = MP_check_retrieve_table(snvt, MPvars)
 mpv_filepath = paste0(analysis_dir,'/annotation_output/annotation_MP_variant.tsv')
-readr::write_tsv(mpvs, file = fmpv_filepath )
+readr::write_tsv(mpvs, file = mpv_filepath )
 
 # testpath = '/Users/manzo/USB/USB_Diagnostics/ShinyVariants/testfiles'
 # df = data.frame(paths = list.files(path = testpath, pattern = "annotation_", recursive = TRUE, full.names = TRUE))
