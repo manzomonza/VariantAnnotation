@@ -21,20 +21,23 @@ idoi = googledrive::as_id("https://docs.google.com/spreadsheets/d/1B-NfpRNhadl7w
 MPvars = googlesheets4::read_sheet(idoi, skip = 1)
 
 
-mpvs = MP_check_retrieve_table(snvt, MPvars)
+mpvs = MP_check_retrieve_table(snv, MPvars)
 mpv_filepath = paste0(analysis_dir,'/annotation_output/annotation_MP_variant.tsv')
-readr::write_tsv(mpvs, file = mpv_filepath )
-
-# testpath = '/Users/manzo/USB/USB_Diagnostics/ShinyVariants/testfiles'
-# df = data.frame(paths = list.files(path = testpath, pattern = "annotation_", recursive = TRUE, full.names = TRUE))
-#
-# df$sample = basename(dirname(dirname(df$paths)))
-# df=tibble::as_tibble(df[,c(2,1)])
-# df = dplyr::group_by(df, sample)
-# df = dplyr::group_split(df)
-#### ONCOGENICpositions
+if(nrow(mpvs) > 0){
+  readr::write_tsv(mpvs, file = mpv_filepath )
+}
 
 
+### BRAF Variant Class
+idoi = googledrive::as_id("https://docs.google.com/spreadsheets/d/1xQ3FfHV2JLndT7J_yLHGcrb7Uqpc-cjjio9OYXkjz14/edit")
+MPvars = googlesheets4::read_sheet(idoi, skip = 1)
+mpvs = BRAF_class_retrieve_table(snv, MPvars)
+mpv_filepath = paste0(analysis_dir,'/annotation_output/annotation_BRAF_variant_class.tsv')
+if(nrow(mpvs) > 0){
+  readr::write_tsv(mpvs, file = mpv_filepath )
+}
+
+### HORAK sccores
 (horak_scores = Horak_score_function_calls(annotation_fp))
 Horak_vals = HorakScore(horak_scores, horakScore_fp = annotation_fp$HorakScoreListings)
 Horak_vals$classification = sapply(Horak_vals$Horak_score, Horak_classification)
