@@ -19,7 +19,7 @@ write_Annotation_Modules(snvt, annotation_fp = annotation_fp)
 source("/home/ionadmin/github_app/GDrive_VariantReport/Gauths.R")
 idoi = googledrive::as_id("https://docs.google.com/spreadsheets/d/1B-NfpRNhadl7w1f5UPkRA_XEg4YI3N4pHRxd9yZgZkc/edit?usp=drive_web&ouid=116704210424700639172")
 MPvars = googlesheets4::read_sheet(idoi, skip = 1)
-mpvs = MP_check_retrieve_table(snv, MPvars)
+mpvs = MP_check_retrieve_table(snvt, MPvars)
 mpv_filepath = paste0(analysis_dir,'/annotation_output/annotation_MP_variant.tsv')
 if(nrow(mpvs) > 0){
   readr::write_tsv(mpvs, file = mpv_filepath )
@@ -34,6 +34,16 @@ braf_class = paste0(analysis_dir,'/annotation_output/annotation_BRAF_variant_cla
 if(nrow(mpvs) > 0){
   readr::write_tsv(mpvs, file = braf_class)
 }
+
+### HRR genes
+idoi = googledrive::as_id('https://docs.google.com/spreadsheets/d/11FZz5m34IYmK1-o2UkjFJ7gatXUBr4_F0mhVdGMxQm8/edit#gid=230169235')
+MPvars = googlesheets4::read_sheet(ss = idoi, sheet  = "HRR_single_genes", skip = 1)
+mpvs = HRR_check_retrieve_table(snvt, MPvars)
+HRRgenes = paste0(analysis_dir,'/annotation_output/annotation_HRRgenes.tsv')
+if(nrow(mpvs) > 0){
+  readr::write_tsv(mpvs, file = HRRgenes)
+}
+
 
 ### HORAK sccores
 (horak_scores = Horak_score_function_calls(annotation_fp))
