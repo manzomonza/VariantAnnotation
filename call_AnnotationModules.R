@@ -45,6 +45,10 @@ if(nrow(mpvs) > 0){
 }
 
 
+## External filter chains
+## https://docs.google.com/spreadsheets/d/16qltcg5StmQk0A2Spb6iBOSXkSgZPqQ_3onqAFQt5tI/edit#gid=0
+
+
 ### HORAK sccores
 (horak_scores = Horak_score_function_calls(annotation_fp))
 Horak_vals = HorakScore(horak_scores, horakScore_fp = annotation_fp$HorakScoreListings)

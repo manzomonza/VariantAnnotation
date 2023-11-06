@@ -47,6 +47,3 @@ MP_check_retrieve_table = function(variant_table, mp_vars_table){
   mpv = dplyr::bind_rows(variant_hits)
   return(mpv)
 }
-
-
-
