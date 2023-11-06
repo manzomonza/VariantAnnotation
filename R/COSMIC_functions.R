@@ -11,6 +11,16 @@ COSMIC_function_call = function(snv_table, sql_con_tbl){
   asnv = VariantAnnotationModules::amino_acid_code_3_to_1(snv_table)
   asnv$COSMIC_n_total = NA
   asnv$COSMIC_n_tissue = NA
+
+  unique_gene_names = unique(asnv$gene)
+  unique_coding = unique(asnv$coding)
+  unique_protein = unique(asnv$protein)
+
+  ## Collect SQL database search to improve speed
+  sql_con_tbl =  dplyr::filter(sql_con_tbl, gene_name %in% unique_gene_names)
+  sql_con_tbl =  dplyr::filter(sql_con_tbl, mutation_cds %in% unique_coding | mutation_aa %in% unique_protein)
+  sql_con_tbl = dplyr::collect(sql_con_tbl)
+
   for(i in 1:nrow(asnv)){
     gene = asnv$gene[i]
     protein = asnv$protein[i]
@@ -21,7 +31,6 @@ COSMIC_function_call = function(snv_table, sql_con_tbl){
     }else{
       variants_per_tissue = dplyr::filter(variants_per_tissue, mutation_aa == protein)
     }
-
     variants_per_tissue = dplyr::collect(variants_per_tissue)
     variants_per_tissue = dplyr::distinct(variants_per_tissue)
     if(nrow(variants_per_tissue) > 0){
@@ -32,8 +41,6 @@ COSMIC_function_call = function(snv_table, sql_con_tbl){
   }
   return(asnv)
 }
-
-
 
 #' Write out cancer Hotspot info table
 #'
