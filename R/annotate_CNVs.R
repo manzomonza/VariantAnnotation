@@ -86,7 +86,11 @@ tsg_cnv_effect = function(gene, cnv_status, tsg_list){
   if(tsggene){
     if(cnv_status == "loss"){
       return("likely pathogenic")
+    }else{
+      return(NA)
     }
+  }else{
+    return(NA)
   }
 }
 
