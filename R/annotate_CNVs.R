@@ -24,7 +24,7 @@ annotate_cnv = function(cnv_table, cnv_lut, tsg_list){
   cnv_table$TSG_cnv = unlist(lapply(cnv_rows, function(i) tsg_cnv_effect(gene = cnv_table$gene[i],
                                                                              cnv_status = cnv_table$cnv_status[i],
                                                                          tsg_list = tsg_list)))
-  cnv_table$HRR_gene = unlist(lapply(cnv_rows, function(i) tsg_cnv_effect(gene = cnv_table$gene[i],
+  cnv_table$HRR_gene = unlist(lapply(cnv_rows, function(i) hrr_cnv(gene = cnv_table$gene[i],
                                                                           hrrgenes = HRRgenes$gene)))
   return(cnv_table)
 }
