@@ -24,7 +24,8 @@ annotate_cnv = function(cnv_table, cnv_lut, tsg_list){
   cnv_table$TSG_cnv = unlist(lapply(cnv_rows, function(i) tsg_cnv_effect(gene = cnv_table$gene[i],
                                                                              cnv_status = cnv_table$cnv_status[i],
                                                                          tsg_list = tsg_list)))
-
+  cnv_table$HRR_gene = unlist(lapply(cnv_rows, function(i) tsg_cnv_effect(gene = cnv_table$gene[i],
+                                                                          hrrgenes = HRRgenes$gene)))
   return(cnv_table)
 }
 
@@ -94,4 +95,20 @@ tsg_cnv_effect = function(gene, cnv_status, tsg_list){
   }
 }
 
-
+#' Indicate if gene is present in HRR gene list
+#'
+#' @param gene
+#' @param hrrgenes
+#'
+#' @return
+#' @export
+#'
+#' @examples
+hrr_cnv = function(gene, hrrgenes){
+  hrr_gene = ifelse(gene %in% hrrgenes)
+  if(hrr_gene){
+    return(TRUE)
+  }else{
+    return(NA)
+  }
+}
