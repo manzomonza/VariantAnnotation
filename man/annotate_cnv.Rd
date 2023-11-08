@@ -4,7 +4,7 @@
 \alias{annotate_cnv}
 \title{Annotate CNV effect}
 \usage{
-annotate_cnv(cnv_table, cnv_lut)
+annotate_cnv(cnv_table, cnv_lut, tsg_list)
 }
 \arguments{
 \item{cnv_lut}{}
