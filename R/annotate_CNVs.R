@@ -105,7 +105,7 @@ tsg_cnv_effect = function(gene, cnv_status, tsg_list){
 #'
 #' @examples
 hrr_cnv = function(gene, hrrgenes){
-  hrr_gene = ifelse(gene %in% hrrgenes)
+  hrr_gene = gene %in% hrrgenes
   if(hrr_gene){
     return(TRUE)
   }else{
