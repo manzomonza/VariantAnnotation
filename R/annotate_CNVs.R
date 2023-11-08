@@ -15,10 +15,10 @@
 #' @examples
 annotate_cnv = function(cnv_table, cnv_lut){
   cnv_rows = 1:nrow(cnv_table)
-  cnv_table$cnv_status = unlist(lapply(cnv_rows, function(i) determine_CNV_status(perc_05 = cnv_table$perc_0.05[i],
+  cnv_table$cnv_status = unlist(lapply(cnv_rows, function(i) determine_cnv_status(perc_05 = cnv_table$perc_0.05[i],
                                                                                   perc_95 = cnv_table$perc_0.95[i])))
 
-  cnv_table$cnv_effect = unlist(lapply(cnv_rows, function(i) gene_CNV_effect(gene = cnv_table$gene[i],
+  cnv_table$cnv_effect = unlist(lapply(cnv_rows, function(i) gene_cnv_effect(gene = cnv_table$gene[i],
                                                                              cnv_status = cnv_table$cnv_status[i],
                                                                              cnv_lut = cnv_lut)))
   return(cnv_table)
@@ -52,7 +52,7 @@ determine_cnv_status = function(perc_05, perc_95){
 #' @export
 #'
 #' @examples
-gene_CNV_effect = function(gene, cnv_status, cnv_lut){
+gene_cnv_effect = function(gene, cnv_status, cnv_lut){
   cnv_lut = dplyr::filter(cnv_lut, GeneSymbol == gene)
   if(cnv_status == "gain"){
     cnv_lut = dplyr::filter(cnv_lut, ProteinChange == "Amplification")
