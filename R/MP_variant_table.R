@@ -18,7 +18,7 @@ MP_variant_check = function(rowid, genestr, codingstr, protein, mp_vars_table){
     mpv = dplyr::filter(mp_vars_table, gene == genestr & amino_acid_1l == protein)
 
   }else if(!is.na(codingstr)){
-    mpv = dplyr::filter(mp_vars_table, gene == genestr & amino_acid_1l == codingstr)
+    mpv = dplyr::filter(mp_vars_table, gene == genestr & coding == codingstr)
   }
   mpv$rowid = rowid
   mpv = dplyr::relocate(mpv, rowid)
