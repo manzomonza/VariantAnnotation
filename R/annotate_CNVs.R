@@ -21,9 +21,11 @@ annotate_cnv = function(cnv_table, cnv_lut, tsg_list){
   cnv_table$cnv_effect = unlist(lapply(cnv_rows, function(i) gene_cnv_effect(gene = cnv_table$gene[i],
                                                                              cnv_status = cnv_table$cnv_status[i],
                                                                              cnv_lut = cnv_lut)))
+
   cnv_table$TSG_cnv = unlist(lapply(cnv_rows, function(i) tsg_cnv_effect(gene = cnv_table$gene[i],
                                                                              cnv_status = cnv_table$cnv_status[i],
                                                                          tsg_list = tsg_list)))
+
   cnv_table$HRR_gene = unlist(lapply(cnv_rows, function(i) hrr_cnv(gene = cnv_table$gene[i],
                                                                           hrrgenes = HRRgenes$gene)))
   return(cnv_table)
@@ -45,6 +47,7 @@ determine_cnv_status = function(perc_05, perc_95){
   if(perc_05 >= 4){
     return("gain")
   }
+  return(NA)
 }
 
 #' Compare CNV status with CNV effect in cnv lut
