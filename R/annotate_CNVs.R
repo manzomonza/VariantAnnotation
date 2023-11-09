@@ -90,6 +90,9 @@ gene_cnv_effect = function(gene, cnv_status, cnv_lut){
 #'
 #' @examples
 tsg_cnv_effect = function(gene, cnv_status, tsg_list){
+  if(is.na(cnv_status)){
+    return(NA)
+  }
   tsggene = gene %in% names(tsg_list)
   if(tsggene){
     if(cnv_status == "loss"){
