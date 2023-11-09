@@ -59,14 +59,18 @@ determine_cnv_status = function(perc_05, perc_95){
 #' @examples
 gene_cnv_effect = function(gene, cnv_status, cnv_lut){
   cnv_lut = dplyr::filter(cnv_lut, GeneSymbol == gene)
-  if(cnv_status == "gain"){
-    cnv_lut = dplyr::filter(cnv_lut, ProteinChange == "Amplification")
-  }else if(cnv_status == "loss"){
-    cnv_lut = dplyr::filter(cnv_lut, ProteinChange == "Deletion")
-  }
-  if(nrow(cnv_lut) >0){
-    cnv_effect = paste(cnv_lut$oncogenic, collapse = ";")
-    return(cnv_effect)
+  if(!is.na(cnv_status)){
+    if(cnv_status == "gain"){
+      cnv_lut = dplyr::filter(cnv_lut, ProteinChange == "Amplification")
+    }else if(cnv_status == "loss"){
+      cnv_lut = dplyr::filter(cnv_lut, ProteinChange == "Deletion")
+    }
+    if(nrow(cnv_lut) >0){
+      cnv_effect = paste(cnv_lut$oncogenic, collapse = ";")
+      return(cnv_effect)
+    }else{
+      return(NA)
+    }
   }else{
     return(NA)
   }
