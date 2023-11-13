@@ -35,7 +35,7 @@ HRR_check_retrieve_table = function(variant_table, mp_vars_table){
       row_indeces[[i]] = variant_table$rowid[i]
     }
   }
-  mpv = dplyr::filter(variant_table, rowid %in% unlist(row_indeces))
+  mpv = dplyr::filter(variant_table, rowid %in% unlist(row_indeces) & gene %in% mp_vars_table$gene)
   mpv = dplyr::select(mpv, rowid, gene, coding, protein, AF)
   mpv$category = "HRR gene"
   return(mpv)
