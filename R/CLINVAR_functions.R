@@ -204,6 +204,7 @@ clinvar_variantID = function(clinvar_hit){
 clinvar_check_gene = function(genestr, clinvar_fil){
   clinvar_fil = dplyr::filter(clinvar_fil, gene_symbol == genestr )
   clinvar_fil = dplyr::collect(clinvar_fil)
+  clinvar_fil = dplyr::distinct(clinvar_fil)
   return(clinvar_fil)
 }
 

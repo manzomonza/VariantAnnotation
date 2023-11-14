@@ -2,7 +2,7 @@
 % Please edit documentation in R/MP_variant_table.R
 \name{MP_check_retrieve_table}
 \alias{MP_check_retrieve_table}
-\title{Title}
+\title{Apply MP_variant_check at table level}
 \usage{
 MP_check_retrieve_table(variant_table, mp_vars_table)
 }
@@ -10,5 +10,5 @@ MP_check_retrieve_table(variant_table, mp_vars_table)
 \item{mp_vars_table}{}
 }
 \description{
-Title
+Apply MP_variant_check at table level
 }
