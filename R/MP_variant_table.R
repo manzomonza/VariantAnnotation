@@ -13,20 +13,19 @@
 #'
 #' @examples
 MP_variant_check = function(rowid, genestr, codingstr, protein, mp_vars_table){
-  if(!is.na(protein)){
+  if(!is.na(protein) & !identical(protein, 'p.?')){
     protein = VCFparse::amino_acid_conversion_three_to_one(protein)
     mpv = dplyr::filter(mp_vars_table, gene == genestr & amino_acid_1l == protein)
 
   }else if(!is.na(codingstr)){
-    mpv = dplyr::filter(mp_vars_table, gene == genestr & amino_acid_1l == codingstr)
+    mpv = dplyr::filter(mp_vars_table, gene == genestr & coding == codingstr)
   }
   mpv$rowid = rowid
   mpv = dplyr::relocate(mpv, rowid)
   return(mpv)
 }
 
-
-#' Title
+#' Apply MP_variant_check at table level
 #'
 #' @param variant_table
 #' @param mp_vars_table
@@ -47,6 +46,3 @@ MP_check_retrieve_table = function(variant_table, mp_vars_table){
   mpv = dplyr::bind_rows(variant_hits)
   return(mpv)
 }
-
-
-

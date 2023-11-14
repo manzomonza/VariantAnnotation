@@ -68,19 +68,23 @@ gnomad_coding_protein_MAF = function(chr, codingstr, proteinstr, position, gnoma
 #' @examples
 table_retrieve_gnomad_MAF = function(snv_table, gnomad){
   snv_table$gnomad_MAF = NA
+  unique_orig_pos = unique(snv_table$origPos)
+  ## Filter gnomad for origPos present in snv table
+  gnomad_fil = dplyr::filter(gnomad, POS %in% unique_orig_pos)
+  gnomad_fil = dplyr::collect(gnomad_fil)
   snv_table = VariantAnnotationModules::amino_acid_code_1_to_3(snv_table)
   for(i in 1:nrow(snv_table)){
     maf_v = gnomad_ref_alt_MAF(chr = stringr::str_remove(snv_table$seqnames[i], pattern = "chr"),
                        ref = snv_table$ref[i],
                        alt = snv_table$alt[i],
                        position = snv_table$origPos[i],
-                       gnomad = gnomad)
+                       gnomad = gnomad_fil)
     if(is.na(maf_v)){
       maf_v = gnomad_coding_protein_MAF(chr = stringr::str_remove(snv_table$seqnames[i], pattern = "chr"),
                                 codingstr = snv_table$coding[i],
                                 proteinstr = snv_table$protein[i],
                                 position = snv_table$origPos[i],
-                                gnomad = gnomad)
+                                gnomad = gnomad_fil)
     }
     snv_table$gnomad_MAF[i] = maf_v
   }
