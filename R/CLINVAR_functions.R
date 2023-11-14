@@ -203,6 +203,7 @@ clinvar_variantID = function(clinvar_hit){
 #' @examples
 clinvar_check_gene = function(genestr, clinvar_fil){
   clinvar_fil = dplyr::filter(clinvar_fil, gene_symbol == genestr )
+  clinvar_fil = dplyr::collect(clinvar_fil)
   return(clinvar_fil)
 }
 
