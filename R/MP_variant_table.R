@@ -25,7 +25,7 @@ MP_variant_check = function(rowid, genestr, codingstr, protein, mp_vars_table){
   return(mpv)
 }
 
-#' Title
+#' Apply MP_variant_check at table level
 #'
 #' @param variant_table
 #' @param mp_vars_table
