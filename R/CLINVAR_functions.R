@@ -205,6 +205,7 @@ clinvar_check_gene = function(genestr, clinvar_fil){
   clinvar_fil = dplyr::filter(clinvar_fil, gene_symbol == genestr )
   clinvar_fil = dplyr::collect(clinvar_fil)
   clinvar_fil = dplyr::distinct(clinvar_fil)
+  clinvar_fil = dplyr::filter(clinvar_fil, grepl(genestr, name, fixed = TRUE ))
   return(clinvar_fil)
 }
 
