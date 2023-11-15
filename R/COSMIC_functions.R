@@ -8,7 +8,8 @@
 #'
 #' @examples
 COSMIC_function_call = function(snv_table, sql_con_tbl){
-  asnv = VariantAnnotationModules::amino_acid_code_3_to_1(snv_table)
+  asnv = snv_table
+  asnv$protein = unname(sapply(asnv$protein, VariantStringConversions::amino_acid_conversion_three_to_one))
   asnv$COSMIC_n_total = NA
   asnv$COSMIC_n_tissue = NA
 
