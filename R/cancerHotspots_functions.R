@@ -72,7 +72,10 @@ cancerHotspot_add_columns_to_snv = function(snv_table){
   snv_table$mutation_position_count = NA
   snv_table$mutation_count = NA
   for(i in 1:nrow(snv_table)){
-    if(is.character(snv_table$protein[i]) & !is.na(snv_table$protein[i]) & !grepl("_", snv_table$protein[i]) & snv_table$protein[i] != 'p.'){
+    if(is.character(snv_table$protein[i]) &
+       !is.na(snv_table$protein[i]) &
+       !grepl("_", snv_table$protein[i]) &
+       snv_table$protein[i] != 'p.'){
     snv_table$ref_AA[i] = ref_amino_acid(snv_table$protein[i])
     snv_table$aa_position[i] = extract_number_from_alphanumeric_string(snv_table$protein[i])
     snv_table$mut_AA[i] = mutation_amino_acid(snv_table$protein[i])
@@ -91,7 +94,9 @@ cancerHotspot_add_columns_to_snv = function(snv_table){
 #'
 #' @examples
 ref_amino_acid = function(aa_change){
-  if(is.character(aa_change) & !is.na(aa_change) & !grepl("_", aa_change)){
+  if(is.character(aa_change) &
+     !is.na(aa_change) &
+     !grepl("_", aa_change)){
     aa_change = stringr::str_extract(aa_change, pattern = "(?<=p\\.)\\w")
     return(aa_change)
   }
@@ -124,7 +129,11 @@ cancerHotspot_add_mutation_values = function(snv_table, cancerHotspots){
   snv_table$mutation_position_count = NA
   snv_table$mutation_count = NA
   for(i in 1:nrow(snv_table)){
-    if(is.character(snv_table$protein[i]) & !is.na(snv_table$protein[i]) & !grepl("_", snv_table$protein[i]) & snv_table$protein[i] != 'p.'){
+    if(is.character(snv_table$protein[i]) &
+       !is.na(snv_table$protein[i]) &
+       !grepl("_", snv_table$protein[i]) &
+       snv_table$protein[i] != 'p.'){
+
       snv_table$mutation_position_count[i] = cancerHotspots_mutation_positionCount(geneName = snv_table$gene[i],
                                                                                    mutation_position = snv_table$aa_position[i],
                                                                                    cancerHotspots = cancerHotspots)
