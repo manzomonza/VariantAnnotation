@@ -14,7 +14,7 @@
 #' @examples
 MP_variant_check = function(rowid, genestr, codingstr, protein, mp_vars_table){
   if(!is.na(protein) & !identical(protein, 'p.?')){
-    protein = VariantStringConversions::amino_acid_conversion_three_to_one(protein)
+    protein = VariantStringConversions::amino_code_conversion_three_to_one(protein)
     mpv = dplyr::filter(mp_vars_table, gene == genestr & amino_acid_1l == protein)
 
   }else if(!is.na(codingstr)){

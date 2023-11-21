@@ -65,7 +65,7 @@ oncogenic_Position = function(geneid, ChangePosition, oncogen_vars){
 #' @examples
 table_retrieve_oncogenic_information = function(filepath, oncogen_vars){
   toi = readr::read_tsv(filepath)
-  toi$protein = unname(sapply(toi$protein, VariantStringConversions::amino_acid_conversion_three_to_one))
+  toi$protein = unname(sapply(toi$protein, VariantStringConversions::amino_code_conversion_three_to_one))
   toi$ChangePosition = stringr::str_extract(string = toi$protein, pattern = "(?<=\\D)\\d+")
   toi$oncogenic_var = NA
   toi$oncogenic_position = NA

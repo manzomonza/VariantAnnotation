@@ -160,7 +160,7 @@ cancerHotspot_add_mutation_values = function(snv_table, cancerHotspots){
 #' @examples
 cancerHotspot_info = function(snv_table, cancerHotspots){
   asnv = snv_table
-  asnv$protein = unname(sapply(asnv$protein, VariantStringConversions::amino_acid_conversion_three_to_one))
+  asnv$protein = unname(sapply(asnv$protein, VariantStringConversions::amino_code_conversion_three_to_one))
   asnv = cancerHotspot_add_columns_to_snv(asnv)
   asnv = cancerHotspot_add_mutation_values(asnv, cancerHotspots = cancerHotspots)
   return(asnv)

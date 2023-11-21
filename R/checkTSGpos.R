@@ -55,7 +55,7 @@ canonical_splicesite = function(numberlist){
 TSG_check_function_call <- function(snvtable, TSG_list){
   if(nrow(snvtable) >0){
     asnv = snvtable
-    asnv$protein = unname(sapply(asnv$protein, VariantStringConversions::amino_acid_conversion_three_to_one))
+    asnv$protein = unname(sapply(asnv$protein, VariantStringConversions::amino_code_conversion_three_to_one))
     asnv$TSG = NA
     asnv$canonical_splicesite = NA
     asnv$protein_alteration_site = NA
