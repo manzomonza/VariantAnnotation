@@ -4,7 +4,7 @@
 \alias{ClinVar_function_call}
 \title{Calls function to process variant table and check variants for entries in Clinvar table}
 \usage{
-ClinVar_function_call(snv_table, clinvar)
+ClinVar_function_call(asnv, clinvar)
 }
 \arguments{
 \item{clinvar}{}

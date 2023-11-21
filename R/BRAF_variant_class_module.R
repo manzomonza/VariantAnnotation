@@ -15,7 +15,7 @@
 BRAF_variant_check = function(rowid, genestr, protein, mp_vars_table){
   if(genestr == "BRAF")
     if(!is.na(protein)){
-      protein = VCFparse::amino_acid_conversion_three_to_one(protein)
+      protein = VariantStringConversions::amino_acid_conversion_three_to_one(protein)
       mpv = dplyr::filter(mp_vars_table, variant == protein)
       if(nrow(mpv) >0){
         mpv$rowid = rowid

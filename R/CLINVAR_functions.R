@@ -39,8 +39,8 @@ clinvarCheck <- function(){
 #' @export
 #'
 #' @examples
-ClinVar_function_call = function(snv_table, clinvar){
-  asnv = amino_acid_code_1_to_3(snv_table)
+ClinVar_function_call = function(asnv, clinvar){
+  asnv$protein = unlist(lapply(asnv$protein, VariantStringConversions::amino_code_conversion_one_to_three))
   asnv$protein = unname(sapply(asnv$protein, fsClinvarfix))
   asnv$ClinVar_Significance = NA
   asnv$ClinVar_VariationID = NA
