@@ -2,8 +2,9 @@
 ## Depends on
 ## -- analysis_dir
 ## -- snvt
-
+gdrive_modules = "/home/ionadmin/github_app/VariantAnnotationModules/call_gdrive_modules.R"
 horak_table = "~/github_app/VariantAnnotationModules/HorakScoreTable.txt"
+
 ONCOGEN_POSITIONS = readr::read_tsv("/mnt/NGS_Diagnostik/Variant_databases/OncoKB/Oncokb_Clinvar_oncogenic_positions.tsv")
 ONCOGEN_POSITIONS$ProteinChangePosition = stringr::str_extract(string = ONCOGEN_POSITIONS$ProteinChange, pattern = "(?<=\\D)\\d+")
 
@@ -12,48 +13,58 @@ oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, on
 readr::write_tsv(oncogenpositions, file=annotation_fp$oncogenPos)
 
 snvt = readr::read_tsv(parsed_fp$parsed_snv)
-annotation_fp = VariantAnnotationModules::annotation_filepaths(analysis_dir)
-write_Annotation_Modules(snvt, annotation_fp = annotation_fp)
 
-### MP Variant Table
-source("/home/ionadmin/github_app/GDrive_VariantReport/Gauths.R")
-# mpvarlink = googledrive::as_id("https://docs.google.com/spreadsheets/d/1B-NfpRNhadl7w1f5UPkRA_XEg4YI3N4pHRxd9yZgZkc/edit?usp=drive_web&ouid=116704210424700639172")
-MPvars = googlesheets4::read_sheet(mpvarlink, skip = 1)
-mpvs = MP_check_retrieve_table(snvt, MPvars)
-mpv_filepath = paste0(analysis_dir,'/annotation_output/annotation_MP_variant.tsv')
-if(nrow(mpvs) > 0){
-  readr::write_tsv(mpvs, file = mpv_filepath )
+
+annotation_dir = paste0(output_path, "/annotation_output")
+if(!dir.exists(annotation_dir)){
+  dir.create(annotation_dir)
 }
+path_annot_gnomad = paste0(annotation_dir, '/annotation_gnomad.tsv')
+path_annot_cancerHotspot = paste0(annotation_dir, '/annotation_cancerHotspot.tsv')
+path_annot_COSMIC = paste0(annotation_dir, '/annotation_COSMIC.tsv')
+path_annot_clinvar = paste0(annotation_dir, '/annotation_ClinVar.tsv')
+path_annot_Horak = paste0(annotation_dir, '/annotation_horak.tsv')
+path_annot_TSG = paste0(annotation_dir, '/annotation_TSG.tsv')
+path_annot_oncogenPos = paste0(annotation_dir, '/annotation_oncogenicPositions.tsv')
+path_annot_HorakScoreListings = paste0(annotation_dir, '/annotation_HorakScoreListings.tsv')
+
+## WRITE OUT MODULE OUTPUTS
+# Cancer Hotspots
+cancerhotspot_s = cancerHotspot_info(snvt, cancerHotspots = CANCERHOTSPOTS)
+selected_tb = dplyr::select(cancerhotspot_s, rowid, gene, protein, ref_AA, aa_position, mut_AA, mutation_position_count, mutation_count)
+readr::write_tsv(selected_tb, file = path_annot_cancerHotspot)
+
+## Cosmic
+cosmic_s = COSMIC_function_call(snv_table = snvt, sql_con_tbl = COSMIC)
+selected_tb = dplyr::select(cosmic_s, rowid, gene, coding, protein, contains("COSMIC")  )
+readr::write_tsv(selected_tb, file = path_annot_COSMIC)
+
+## Gnomad
+gnomad_s = table_retrieve_gnomad_MAF(snvt, gnomad = GNOMAD)
+selected_tb = dplyr::select(gnomad_s, rowid, gene, ref,alt, coding, protein, contains("gnomad")  )
+readr::write_tsv(selected_tb, file = path_annot_gnomad)
+
+## #CLINVAR
+clinvar_s = ClinVar_function_call(snvt, clinvar = CLINVAR)
+selected_tb = dplyr::select(clinvar_s, rowid, gene, coding, protein, contains("ClinVar"))
+readr::write_tsv(selected_tb, file = path_annot_clinvar)
+
+## TSG info
+tsg_s = TSG_check_function_call(snvt, TSG_list = TSG_LENGTHS)
+selected_tb = dplyr::select(tsg_s, rowid, gene, coding, protein,TSG,canonical_splicesite, aa_position, protein_length )
+readr::write_tsv(selected_tb, file = path_annot_TSG)
 
 
-### BRAF Variant Class
-# braflink = googledrive::as_id("https://docs.google.com/spreadsheets/d/1xQ3FfHV2JLndT7J_yLHGcrb7Uqpc-cjjio9OYXkjz14/edit")
-BRAFinfo = googlesheets4::read_sheet(braflink, skip = 1)
-brafi = BRAF_class_retrieve_table(snvt, BRAFinfo)
-braf_class = paste0(analysis_dir,'/annotation_output/annotation_BRAF_variant_class.tsv')
-if(nrow(brafi) > 0){
-  readr::write_tsv(brafi, file = braf_class)
-}
-
-### HRR genes
-# hrrgenes = googledrive::as_id('https://docs.google.com/spreadsheets/d/11FZz5m34IYmK1-o2UkjFJ7gatXUBr4_F0mhVdGMxQm8/edit#gid=230169235')
-HRRgenes = googlesheets4::read_sheet(ss = hrrgenes, sheet  = "HRR_single_genes", skip = 1)
-hrrs = HRR_check_retrieve_table(snvt, HRRgenes)
-HRRgenepath = paste0(analysis_dir,'/annotation_output/annotation_HRRgenes.tsv')
-if(nrow(mpvs) > 0){
-  readr::write_tsv(hrrs, file = HRRgenepath)
-}
-
-
-## External filter chains
-## https://docs.google.com/spreadsheets/d/16qltcg5StmQk0A2Spb6iBOSXkSgZPqQ_3onqAFQt5tI/edit#gid=0
-
+annotation_fps = list.files(path = annotation_dir)
 
 ### HORAK sccores
-(horak_scores = Horak_score_function_calls(annotation_fp))
-Horak_vals = HorakScore(horak_scores, horakScore_fp = annotation_fp$HorakScoreListings)
+(horak_scores = Horak_score_function_calls(annotation_fps))
+Horak_vals = HorakScore(horak_scores, horakScore_fp = path_annot_HorakScoreListings)
 Horak_vals$classification = sapply(Horak_vals$Horak_score, Horak_classification)
-readr::write_tsv(Horak_vals, file=annotation_fp$Horak)
+readr::write_tsv(Horak_vals, file=path_annot_Horak)
+
+source(gdrive_modules)
+
 
 
 
