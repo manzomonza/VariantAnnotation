@@ -44,8 +44,10 @@ ClinVar_function_call = function(asnv, clinvar){
   asnv$protein = unname(sapply(asnv$protein, fsClinvarfix))
   asnv$ClinVar_Significance = NA
   asnv$ClinVar_VariationID = NA
+  gene_vec = asnv$gene
+  clinhit = dplyr::filter(clinvar, gene_symbol %in% gene_vec)
   for(i in 1:nrow(asnv)){
-    clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr = asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinvar )
+    clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr = asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinhit )
     if(typeof(clinhit) == 'list'){
       clinhit = somatic_filtering(clinhit)
       asnv$ClinVar_Significance[i] = paste0(clinhit$clinical_significance, collapse = ";")
