@@ -9,8 +9,7 @@ ONCOGEN_POSITIONS = readr::read_tsv("/mnt/NGS_Diagnostik/Variant_databases/OncoK
 ONCOGEN_POSITIONS$ProteinChangePosition = stringr::str_extract(string = ONCOGEN_POSITIONS$ProteinChange, pattern = "(?<=\\D)\\d+")
 
 
-oncogenpositions = table_retrieve_oncogenic_information(parsed_fp$parsed_snv, oncogen_vars = ONCOGEN_POSITIONS)
-readr::write_tsv(oncogenpositions, file=annotation_fp$oncogenPos)
+
 
 snvt = readr::read_tsv(parsed_fp$parsed_snv)
 
@@ -27,8 +26,13 @@ path_annot_Horak = paste0(annotation_dir, '/annotation_horak.tsv')
 path_annot_TSG = paste0(annotation_dir, '/annotation_TSG.tsv')
 path_annot_oncogenPos = paste0(annotation_dir, '/annotation_oncogenicPositions.tsv')
 path_annot_HorakScoreListings = paste0(annotation_dir, '/annotation_HorakScoreListings.tsv')
-
+path_annot_oncogenPos = paste0(annotation_dir, '/annotation_oncogenicPositions.tsv')
 ## WRITE OUT MODULE OUTPUTS
+
+oncogenpositions = table_retrieve_oncogenic_information(path_snv, oncogen_vars = ONCOGEN_POSITIONS)
+readr::write_tsv(oncogenpositions, file = path_annot_oncogenPos)
+
+
 # Cancer Hotspots
 cancerhotspot_s = cancerHotspot_info(snvt, cancerHotspots = CANCERHOTSPOTS)
 selected_tb = dplyr::select(cancerhotspot_s, rowid, gene, protein, ref_AA, aa_position, mut_AA, mutation_position_count, mutation_count)
