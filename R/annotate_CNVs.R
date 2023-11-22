@@ -15,8 +15,8 @@
 #' @examples
 annotate_cnv = function(cnv_table, cnv_lut, tsg_list){
   cnv_rows = 1:nrow(cnv_table)
-  cnv_table$cnv_status = unlist(lapply(cnv_rows, function(i) determine_cnv_status(perc_05 = cnv_table$perc_0.05[i],
-                                                                                  perc_95 = cnv_table$perc_0.95[i])))
+  cnv_table$cnv_status = unlist(lapply(cnv_rows, function(i) determine_cnv_status(perc_05 = cnv_table$percentile_0.05[i],
+                                                                                  perc_95 = cnv_table$percentile_0.95[i])))
 
   cnv_table$cnv_effect = unlist(lapply(cnv_rows, function(i) gene_cnv_effect(gene = cnv_table$gene[i],
                                                                              cnv_status = cnv_table$cnv_status[i],
