@@ -46,6 +46,7 @@ ClinVar_function_call = function(asnv, clinvar){
   asnv$ClinVar_VariationID = NA
   gene_vec = asnv$gene
   clinhit = dplyr::filter(clinvar, gene_symbol %in% gene_vec)
+  clinhit = dplyr::collect(clinhit)
   for(i in 1:nrow(asnv)){
     clinhit = clinvar_filtering(genestr = asnv$gene[i], codingstr = asnv$coding[i], proteinstr = asnv$protein[i], clinvar = clinhit )
     if(typeof(clinhit) == 'list'){
