@@ -49,6 +49,7 @@ Horak_score_oncogenpos = function(oncogenPos_path){
 Horak_score_TSG = function(TSGpath){
   tsg = readr::read_tsv(TSGpath)
   tsg$TSG_hscore = NA
+  hscore = 0
   for (i in 1:nrow(tsg)){
     if(!is.na(tsg$TSG[i])){
       aa_position = as.numeric(tsg$aa_position[i])

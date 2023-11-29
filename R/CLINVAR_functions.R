@@ -53,8 +53,6 @@ ClinVar_function_call = function(asnv, clinvar){
       clinhit = somatic_filtering(clinhit)
       asnv$ClinVar_Significance[i] = paste0(clinhit$clinical_significance, collapse = ";")
       asnv$ClinVar_VariationID[i] = paste0(clinhit$variation_id, collapse = ";")
-      # if(nrow(clinhit) !=1){
-      #   asnv$ClinVar_Significance[i] = list(clinhit$clinical_significance)
       #   asnv$ClinVar_VariationID[i] = list(clinhit$variation_id)
       # }else{
       #   asnv$ClinVar_Significance[i] = clinhit$clinical_significance
